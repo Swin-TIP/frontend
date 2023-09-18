@@ -5,6 +5,8 @@ import Home from './Home.vue';
 import Login from './views/Login.vue';
 import Signup from './views/Signup.vue';
 
+import './assets/main.css';
+
 // Define routes
 const routes = [
     { path: '/', component: Home },
