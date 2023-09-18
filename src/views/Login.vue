@@ -19,7 +19,7 @@ import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 <style scoped>
 .main__login {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
