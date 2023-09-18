@@ -1,14 +1,17 @@
 <script setup>
+import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 </script>
 
 <template>
     <main class="main__login">
         <div class="container">
+            <img class="logo" :src="BrightSparksLogo" alt="Bright Sparks Logo" />
+            <h1 class="title">Sign in</h1>
             <label for="email">Email</label>
-            <input type="text" id="email" />
+            <input type="text" id="email" placeholder="Email" />
             <label for="password">Password</label>
-            <input type="text" id="password" />
-            <button>Login</button>
+            <input type="password" id="password" placeholder="Password" />
+            <button>Sign in</button>
         </div>
     </main>
 </template>
@@ -27,19 +30,32 @@
     display: flex;
     flex-direction: column;
     width: 15em;
+    padding: 2em 2.5em;
+    background-color: #FAFAFA;
+}
+
+.logo {
+    height: 35px;
+}
+
+.title {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 1em;
 }
 
 input {
     height: 1.8em;
-    padding: 0.3em 0.5em;
-    margin-bottom: 1em;
+    padding: 0.3em 0.7em;
+    margin-bottom: 1.2em;
     border: none;
     border-radius: 10px;
     background-color: #D9D9D9;
 }
 
 label {
-    margin-bottom: 0.5em;
+    /* margin-bottom: 0.5em; */
+    display: none;
 }
 
 button {
