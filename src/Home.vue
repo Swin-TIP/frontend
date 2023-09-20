@@ -2,10 +2,20 @@
 import Sidebar from './components/Sidebar.vue';
 </script>
 <template>
-    <Sidebar />
-    <main>
-        <router-view />
-    </main>
+    <div class="layout">
+        <Sidebar />
+        <main class="main">
+            <router-view />
+        </main>
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.layout {
+    display: flex;
+}
+
+.main {
+    width: 76%;
+}
+</style>

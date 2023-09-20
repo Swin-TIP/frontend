@@ -31,7 +31,7 @@ const currentRoute = useRoute().fullPath;
     flex-direction: column;
     justify-content: space-between;
     height: 100vh;
-    width: 32%;
+    width: 24%;
     background-color: #F5F5FA;
 }
 

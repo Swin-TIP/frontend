@@ -56,7 +56,6 @@ input {
 }
 
 label {
-    /* margin-bottom: 0.5em; */
     display: none;
 }
 
