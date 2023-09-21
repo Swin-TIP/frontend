@@ -14,6 +14,8 @@ import BrightSparksLogo from '../assets/icons/brightsparks.svg';
             <label for="confirm-password">Confirm Password</label>
             <input type="password" id="confirm-password" placeholder="Confirm Password" />
             <button>Sign Up</button>
+            <div class="horizontal-line" />
+            <p class="footer">Already have an account? Login <router-link to="/login">here</router-link>.</p>
         </div>
     </main>
 </template>
@@ -66,5 +68,17 @@ button {
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     background-color: #4ADEFF;
+}
+
+.horizontal-line {
+    margin-top: 1em;
+    height: 1px;
+    width: 100%;
+    background-color: rgb(208, 208, 208);
+}
+
+.footer {
+    font-size: 0.6em;
+    margin-bottom: 0;
 }
 </style>
