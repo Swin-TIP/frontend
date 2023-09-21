@@ -1,0 +1,3 @@
+<template>
+    Registered Classes
+</template>
