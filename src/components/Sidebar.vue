@@ -1,9 +1,16 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 
 const currentRoute = useRoute().fullPath;
+const router = useRouter();
+
+const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    router.push("/login");
+};
 </script>
 
 <template>
@@ -21,7 +28,7 @@ const currentRoute = useRoute().fullPath;
                     Classes</router-link>
             </nav>
         </div>
-        <router-link class="sidenav__link sidenav__logout" to="/login">Logout</router-link>
+        <router-link @click.native="handleLogout" class="sidenav__link sidenav__logout" to="/login">Logout</router-link>
     </aside>
 </template>
 
