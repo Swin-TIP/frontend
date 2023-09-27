@@ -1,5 +1,28 @@
 <script setup>
+import { useRouter } from 'vue-router';
+
+import { login } from '../API/auth';
 import BrightSparksLogo from '../assets/icons/brightsparks.svg';
+
+const router = useRouter();
+
+let email = '';
+let password = '';
+
+const handleLogin = async () => {
+    if (email === '' || password === '') {
+        return;
+    } else {
+        const data = await login(email, password);
+        if (data instanceof Error) {
+            console.log("Error occurred");
+        } else {
+            localStorage.setItem("token", data.accessToken);
+            localStorage.setItem("role", data.role);
+            router.push("/");
+        }
+    }
+};
 </script>
 
 <template>
@@ -8,10 +31,10 @@ import BrightSparksLogo from '../assets/icons/brightsparks.svg';
             <img class="logo" :src="BrightSparksLogo" alt="Bright Sparks Logo" />
             <h1 class="title">Sign in</h1>
             <label for="email">Email</label>
-            <input type="text" id="email" placeholder="Email" />
+            <input v-model="email" type="text" id="email" placeholder="Email" />
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Password" />
-            <button>Sign in</button>
+            <input v-model="password" type="password" id="password" placeholder="Password" />
+            <button @click="handleLogin">Sign in</button>
             <div class="horizontal-line" />
             <p class="footer">Don't have an account? Register <router-link to="/signup">here</router-link>.</p>
         </div>
