@@ -5,7 +5,7 @@ import Classes from './views/Classes.vue';
 import Home from './Home.vue';
 import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
-import Signup from './views/Signup.vue';
+import Register from './views/Register.vue';
 
 import './assets/main.css';
 
@@ -19,7 +19,7 @@ const routes = [
         ]
     },
     { path: '/login', component: Login },
-    { path: '/signup', component: Signup }
+    { path: '/register', component: Register }
 ];
 
 const router = createRouter({

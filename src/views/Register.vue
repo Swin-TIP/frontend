@@ -1,19 +1,32 @@
 <script setup>
 import BrightSparksLogo from '../assets/icons/brightsparks.svg';
+
+let name = '';
+let email = '';
+let password = '';
+let confirmPassword = '';
+
+const handleRegister = () => {
+    if (password !== confirmPassword) {
+        console.error("Passwords dont match");
+    }
+};
 </script>
 
 <template>
-    <main class="main__signup">
+    <main class="main__register">
         <div class="container">
             <img class="logo" :src="BrightSparksLogo" alt="Bright Sparks Logo" />
             <h1 class="title">Sign up</h1>
+            <label for="name">Name</label>
+            <input v-model="name" type="text" id="name" placeholder="Name" />
             <label for="email">Email</label>
-            <input type="text" id="email" placeholder="Email" />
+            <input v-model="email" type="text" id="email" placeholder="Email" />
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Password" />
+            <input v-model="password" type="password" id="password" placeholder="Password" />
             <label for="confirm-password">Confirm Password</label>
-            <input type="password" id="confirm-password" placeholder="Confirm Password" />
-            <button>Sign Up</button>
+            <input v-model="confirmPassword" type="password" id="confirm-password" placeholder="Confirm Password" />
+            <button @click="handleRegister">Register</button>
             <div class="horizontal-line" />
             <p class="footer">Already have an account? Login <router-link to="/login">here</router-link>.</p>
         </div>
@@ -21,7 +34,7 @@ import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 </template>
 
 <style scoped>
-.main__signup {
+.main__register {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -68,6 +81,7 @@ button {
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     background-color: #4ADEFF;
+    cursor: pointer;
 }
 
 .horizontal-line {

@@ -36,7 +36,7 @@ const handleLogin = async () => {
             <input v-model="password" type="password" id="password" placeholder="Password" />
             <button @click="handleLogin">Sign in</button>
             <div class="horizontal-line" />
-            <p class="footer">Don't have an account? Register <router-link to="/signup">here</router-link>.</p>
+            <p class="footer">Don't have an account? Register <router-link to="/register">here</router-link>.</p>
         </div>
     </main>
 </template>
