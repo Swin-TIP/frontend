@@ -1,14 +1,26 @@
 <script setup>
+import { register } from '../API/auth';
 import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 
 let name = '';
 let email = '';
 let password = '';
 let confirmPassword = '';
+let grade = 0;
 
-const handleRegister = () => {
+const handleRegister = async () => {
     if (password !== confirmPassword) {
         console.error("Passwords dont match");
+    }
+    const data = await register(name, email, password, grade);
+
+    if (data instanceof Error) {
+        console.log("Error occurred");
+    } else {
+        localStorage.setItem("id", data._id);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("approved", data.approved);
+        router.push("/");
     }
 };
 </script>
@@ -26,6 +38,19 @@ const handleRegister = () => {
             <input v-model="password" type="password" id="password" placeholder="Password" />
             <label for="confirm-password">Confirm Password</label>
             <input v-model="confirmPassword" type="password" id="confirm-password" placeholder="Confirm Password" />
+            <label for="grade">Grade</label>
+            <select v-model="grade" :class="{ 'select__default': grade === 0 }" id="grade">
+                <option value="0">Grade Level:</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+            </select>
             <button @click="handleRegister">Register</button>
             <div class="horizontal-line" />
             <p class="footer">Already have an account? Login <router-link to="/login">here</router-link>.</p>
@@ -61,13 +86,22 @@ const handleRegister = () => {
     margin-bottom: 1em;
 }
 
-input {
+input,
+select {
     height: 1.8em;
     padding: 0.3em 0.7em;
     margin-bottom: 1.5em;
     border: none;
     border-radius: 10px;
     background-color: #D9D9D9;
+}
+
+select {
+    height: 2.3em;
+}
+
+.select__default {
+    color: grey;
 }
 
 label {

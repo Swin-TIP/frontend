@@ -15,9 +15,27 @@ export const login = async (email, password) => {
         } = response.data;
 
         return {
+            approved,
             role,
             accessToken
         };
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
+export const register = async (name, email, password, grade) => {
+    const body = {
+        name,
+        email,
+        password,
+        grade
+    };
+    try {
+        const response = await axios.post(`${API_URL}/student/register`, body);
+        const { approved, role, _id } = response.data;
+        return approved;
     } catch (error) {
         console.error(error);
         return new Error(error);
