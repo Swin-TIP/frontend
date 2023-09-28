@@ -1,6 +1,9 @@
 <script setup>
+import { useRouter } from 'vue-router';
 import { register } from '../API/auth';
 import BrightSparksLogo from '../assets/icons/brightsparks.svg';
+
+const router = useRouter();
 
 let name = '';
 let email = '';
