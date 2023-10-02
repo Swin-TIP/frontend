@@ -1,17 +1,31 @@
 <script setup>
-import { formatDateString, startOfWeek, endOfWeek } from '../utils/dateOfWeek';
+import { ref } from 'vue';
+import { formatDateString, startOfWeek, endOfWeek, previousWeek, nextWeek } from '../utils/dateOfWeek';
 
 let dateStart = startOfWeek(new Date());
 let dateEnd = endOfWeek(new Date());
-let dateStartString = formatDateString(dateStart);
-let dateEndString = formatDateString(dateEnd);
+let dateStartString = ref(formatDateString(dateStart));
+let dateEndString = ref(formatDateString(dateEnd));
+
+const previousWeekHandler = () => {
+    dateStart = previousWeek(dateStart);
+    dateEnd = previousWeek(dateEnd);
+    dateStartString.value = formatDateString(dateStart);
+    dateEndString.value = formatDateString(dateEnd);
+};
+const nextWeekHandler = () => {
+    dateStart = nextWeek(dateStart);
+    dateEnd = nextWeek(dateEnd);
+    dateStartString.value = formatDateString(dateStart);
+    dateEndString.value = formatDateString(dateEnd);
+};
 </script>
 
 <template>
     <section class="container">
-        <button>&lt; PREV</button>
+        <button @click="previousWeekHandler">&lt; PREV</button>
         <span>{{ dateStartString }} - {{ dateEndString }}</span>
-        <button>NEXT &gt;</button>
+        <button @click="nextWeekHandler">NEXT &gt;</button>
     </section>
 </template>
 
