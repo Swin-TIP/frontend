@@ -6,6 +6,7 @@ import Home from './Home.vue';
 import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
 import Signup from './views/Signup.vue';
+import Students from './views/Students.vue';
 
 import './assets/main.css';
 
@@ -16,10 +17,11 @@ const routes = [
         children: [
             { path: '/classes', component: Classes },
             { path: '/schedule', component: Schedule },
+            { path: '/students', component: Students },
         ]
     },
     { path: '/login', component: Login },
-    { path: '/signup', component: Signup }
+    { path: '/signup', component: Signup },
 ];
 
 const router = createRouter({

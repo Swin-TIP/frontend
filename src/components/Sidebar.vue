@@ -19,6 +19,8 @@ const currentRoute = useRoute().fullPath;
                     Schedule</router-link>
                 <router-link class="sidenav__link" :class="{ active: currentRoute === '/classes' }" to="/classes">Registered
                     Classes</router-link>
+              <router-link class="sidenav__link" :class="{ active: currentRoute === '/students' }" to="/students">
+                Students</router-link>
             </nav>
         </div>
         <router-link class="sidenav__link sidenav__logout" to="/login">Logout</router-link>
