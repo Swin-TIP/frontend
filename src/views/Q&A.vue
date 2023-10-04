@@ -13,16 +13,60 @@
   </div>
 
   <div id="questionContainer">
-    <div class="question">
-      <span class="qDetail">Why is x = 1 in question 24?</span>
+    <div v-for="(question, index) in questionArr" class="question">
+      <span class="qDetail">{{ question }}</span>
       <span class="asker">Asked by: Andy</span>
-      <div class="buttons">
-        <button id="answering">Answering</button>
-        <button id="mark">Mark as answerd</button>
+      <div class="buttons" v-if="userGroup === 'tutor'">
+        <button class="answering">{{ questionStatus[index] }}</button>
+        <button class="mark" v-on:click="markAsAnswered(index)">Mark as answerd</button>
       </div>
+      <div class="buttons" v-if="userGroup === 'student'">
+        <button class="answering">&uarr;</button>
+        <button class="mark" v-on:click="markAsAnswered(index)">&darr;</button>
+      </div>
+    </div>
+
+    <div id="postQuestion" v-if="userGroup === 'student'">
+      <div id="questionInput">
+        <input v-model="qInput" type="text" name="qInput" id="qInput">
+      </div>
+      <button id="post" v-on:click="postQuestion">Post</button>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      qStatus: 'Answering',
+      newQuestion: '',
+      questionArr: [],
+      questionStatus: [],
+      userGroup: 'student'
+    }
+  },
+
+  methods: {
+    beAnswered() {
+      this.qStatus = 'Answered'
+    },
+
+    postQuestion() {
+      if (this.qInput !== '') {
+        this.questionArr.push(this.qInput)
+        this.questionStatus.push('Answering')
+        this.qInput = ''
+      }
+    },
+
+    markAsAnswered(index) {
+      this.questionStatus[index] = 'Answered'
+    }
+
+  }
+}
+</script>
 
 <style scoped>
 #header {
@@ -47,10 +91,13 @@
 }
 
 #questionContainer {
+  position: relative;
+  overflow: auto;
   height: 588px;
   width: 995px;
   margin-top: 20px;
   margin-left: 30px;
+  margin-bottom: 10px;
   background-color: #d9d9d9;
   border-radius: 25px;
 }
@@ -97,15 +144,48 @@
   /* border-radius: 15px; */
 }
 
-#answering,
-#mark {
+.answering,
+.mark {
   width: 150px;
   height: 30px;
   border-radius: 15px;
   border: none;
 }
 
-#mark:hover {
+.mark:hover {
   background: aqua;
+}
+
+#postQuestion {
+  position: absolute;
+  bottom: 10px;
+  width: 80%;
+  height: 52px;
+  margin-left: 10%;
+  display: flex;
+  border-radius: 20px;
+  background-color: white;
+}
+
+#qInput {
+  border: none;
+  margin-top: 2px;
+  width: 600px;
+  height: 90%;
+  margin-left: 20px;
+}
+
+#post {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 119px;
+  height: 32px;
+  border-radius: 15px;
+  border: none;
+}
+
+#post:hover {
+  background-color: aqua;
 }
 </style>
