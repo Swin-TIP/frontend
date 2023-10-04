@@ -37,12 +37,14 @@ const makeDayActive = (day) => {
 <style scoped>
 .container {
     margin-left: 30px;
+    height: 40px;
 }
 
 .tab {
-    height: 40px;
+    height: 100%;
     width: 70px;
     border: 1px solid #B3B3B3;
+    background-color: #F0F0F0;
     cursor: pointer;
 }
 
