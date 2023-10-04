@@ -1,27 +1,34 @@
 <script setup>
+import { ref } from 'vue';
+
+let activeDay = ref("Monday");
+
+const makeDayActive = (day) => {
+    activeDay.value = day;
+};
 </script>
 
 <template>
     <div class="container">
-        <button class="tab">
+        <button @click="makeDayActive('Monday')" class="tab" :class="{ active: activeDay === 'Monday' }">
             M
         </button>
-        <button class="tab">
+        <button @click="makeDayActive('Tuesday')" class="tab" :class="{ active: activeDay === 'Tuesday' }">
             T
         </button>
-        <button class="tab">
+        <button @click="makeDayActive('Wednesday')" class="tab" :class="{ active: activeDay === 'Wednesday' }">
             W
         </button>
-        <button class="tab">
+        <button @click="makeDayActive('Thursday')" class="tab" :class="{ active: activeDay === 'Thursday' }">
             T
         </button>
-        <button class="tab">
+        <button @click="makeDayActive('Friday')" class="tab" :class="{ active: activeDay === 'Friday' }">
             F
         </button>
-        <button class="tab">
+        <button @click="makeDayActive('Saturday')" class="tab" :class="{ active: activeDay === 'Saturday' }">
             S
         </button>
-        <button class="tab">
+        <button @click="makeDayActive('Sunday')" class="tab" :class="{ active: activeDay === 'Sunday' }">
             S
         </button>
     </div>
@@ -37,5 +44,9 @@
     width: 70px;
     border: 1px solid #B3B3B3;
     cursor: pointer;
+}
+
+.active {
+    border-bottom: none;
 }
 </style>
