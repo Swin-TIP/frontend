@@ -7,6 +7,7 @@ import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
 import Signup from './views/Signup.vue';
 import QA from './views/Q&A.vue'
+import Students from './views/Students.vue';
 
 import './assets/main.css';
 
@@ -17,7 +18,8 @@ const routes = [
     children: [
       { path: '/classes', component: Classes },
       { path: '/schedule', component: Schedule },
-      { path: '/question', component: QA }
+      { path: '/question', component: QA },
+      { path: '/students', component: Students },
     ]
   },
   { path: '/login', component: Login },

@@ -21,6 +21,8 @@ const currentRoute = useRoute().fullPath;
           Classes</router-link>
         <router-link class="sidenav__link" :class="{ active: currentRoute === '/question' }" to="/question">Q&A
           board</router-link>
+        <router-link class="sidenav__link" :class="{ active: currentRoute === '/students' }" to="/students">
+          Students</router-link>
       </nav>
     </div>
     <router-link class="sidenav__link sidenav__logout" to="/login">Logout</router-link>
