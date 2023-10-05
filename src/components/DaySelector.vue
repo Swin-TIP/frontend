@@ -1,14 +1,18 @@
 <script setup>
-import { defineEmits, ref } from 'vue';
+import { defineEmits, onMounted, ref } from 'vue';
 
-const emit = defineEmits(["day-clicked"]);
+const emit = defineEmits(["day-selected"]);
 
 let activeDay = ref("Monday");
 
 const makeDayActive = (day) => {
     activeDay.value = day;
-    emit('day-clicked', day);
+    emit('day-selected', day);
 };
+
+onMounted(() => {
+    emit('day-selected', activeDay.value);
+});
 </script>
 
 <template>

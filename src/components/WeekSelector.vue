@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { defineEmits, onMounted, ref } from 'vue';
 import { formatDateString, startOfWeek, endOfWeek, previousWeek, nextWeek } from '../utils/dateOfWeek';
+
+const emit = defineEmits(['week-selected']);
 
 let dateStart = startOfWeek(new Date());
 let dateEnd = endOfWeek(new Date());
@@ -10,15 +12,21 @@ let dateEndString = ref(formatDateString(dateEnd));
 const previousWeekHandler = () => {
     dateStart = previousWeek(dateStart);
     dateEnd = previousWeek(dateEnd);
+    emit('week-selected', dateStart);
     dateStartString.value = formatDateString(dateStart);
     dateEndString.value = formatDateString(dateEnd);
 };
 const nextWeekHandler = () => {
     dateStart = nextWeek(dateStart);
     dateEnd = nextWeek(dateEnd);
+    emit('week-selected', dateStart);
     dateStartString.value = formatDateString(dateStart);
     dateEndString.value = formatDateString(dateEnd);
 };
+
+onMounted(() => {
+    emit('week-selected', dateStart);
+});
 </script>
 
 <template>

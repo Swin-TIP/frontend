@@ -1,8 +1,61 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, defineProps } from 'vue';
 
-let day = ref("Monday");
-let date = ref("2 October 2023");
+const props = defineProps({
+    day: {
+        type: String,
+        default: "Monday"
+    },
+    date: {
+        type: Date,
+        default: new Date()
+    }
+});
+
+let dateString = computed(() => props.date.getDate());
+let monthString = computed(() => {
+    let result = "";
+    switch (props.date.getMonth()) {
+        case 0:
+            result = "January";
+            break;
+        case 1:
+            result = "February";
+            break;
+        case 2:
+            result = "March";
+            break;
+        case 3:
+            result = "April";
+            break;
+        case 4:
+            result = "May";
+            break;
+        case 5:
+            result = "June";
+            break;
+        case 6:
+            result = "July";
+            break;
+        case 7:
+            result = "August";
+            break;
+        case 8:
+            result = "September";
+            break;
+        case 9:
+            result = "October";
+            break;
+        case 10:
+            result = "November";
+            break;
+        case 11:
+            result = "December";
+            break;
+    };
+    return result;
+});
+
 let sessionSchedule = [
     {
         timeStart: "12:30",
@@ -36,7 +89,7 @@ let sessionSchedule = [
 
 <template>
     <div class="container">
-        <h2 class="session__date">{{ day }}, {{ date }}</h2>
+        <h2 class="session__date">{{ props.day }}, {{ dateString }} {{ monthString }}</h2>
         <article v-for="(session, index) in sessionSchedule" class="session__item"
             :class="{ session__last: index === sessionSchedule.length - 1 }">
             <div class="session__details">
