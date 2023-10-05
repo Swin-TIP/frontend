@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue'
-import Classes from './views/Classes.vue';
+import Sessions from './views/Sessions.vue';
 import Home from './Home.vue';
 import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
@@ -15,7 +15,7 @@ const routes = [
     {
         path: '/', component: Home,
         children: [
-            { path: '/classes', component: Classes },
+            { path: '/sessions', component: Sessions },
             { path: '/schedule', component: Schedule },
             { path: '/students', component: Students },
         ]

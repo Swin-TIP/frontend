@@ -22,12 +22,13 @@ const handleLogout = () => {
             </div>
             <nav>
                 <router-link class="sidenav__link" :class="{ active: currentRoute === '/' }" to="/">Home</router-link>
-                <router-link class="sidenav__link" :class="{ active: currentRoute === '/schedule' }" to="/schedule">Class
+                <router-link class="sidenav__link" :class="{ active: currentRoute === '/schedule' }" to="/schedule">Session
                     Schedule</router-link>
-                <router-link class="sidenav__link" :class="{ active: currentRoute === '/classes' }" to="/classes">Registered
-                    Classes</router-link>
-              <router-link class="sidenav__link" :class="{ active: currentRoute === '/students' }" to="/students">
-                Students</router-link>
+                <router-link class="sidenav__link" :class="{ active: currentRoute === '/sessions' }"
+                    to="/sessions">Registered
+                    Sessions</router-link>
+                <router-link class="sidenav__link" :class="{ active: currentRoute === '/students' }" to="/students">
+                    Students</router-link>
             </nav>
         </div>
         <router-link @click.native="handleLogout" class="sidenav__link sidenav__logout" to="/login">Logout</router-link>
