@@ -35,40 +35,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      qStatus: 'Answering',
-      newQuestion: '',
-      questionArr: [],
-      questionStatus: [],
-      userGroup: 'student'
-    }
-  },
-
-  methods: {
-    beAnswered() {
-      this.qStatus = 'Answered'
-    },
-
-    postQuestion() {
-      if (this.qInput !== '') {
-        this.questionArr.push(this.qInput)
-        this.questionStatus.push('Answering')
-        this.qInput = ''
-      }
-    },
-
-    markAsAnswered(index) {
-      this.questionStatus[index] = 'Answered'
-    }
-
-  }
-}
-</script>
+<script src="../API/QA"></script>
 
 <style scoped>
+@import url(../assets/main.css);
+
 #header {
   margin-left: 20px;
   font-size: 45px;
