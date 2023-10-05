@@ -1,0 +1,3 @@
+<template>
+    Registered Sessions
+</template>
