@@ -1,10 +1,13 @@
 <script setup>
-import { ref } from 'vue';
+import { defineEmits, ref } from 'vue';
+
+const emit = defineEmits(["day-clicked"]);
 
 let activeDay = ref("Monday");
 
 const makeDayActive = (day) => {
     activeDay.value = day;
+    emit('day-clicked', day);
 };
 </script>
 
