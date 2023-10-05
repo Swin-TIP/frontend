@@ -5,12 +5,8 @@ import Classes from './views/Classes.vue';
 import Home from './Home.vue';
 import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
-<<<<<<< HEAD
 import Register from './views/Register.vue';
-=======
-import Signup from './views/Signup.vue';
 import Students from './views/Students.vue';
->>>>>>> main
 
 import './assets/main.css';
 
