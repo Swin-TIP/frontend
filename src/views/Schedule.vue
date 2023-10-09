@@ -1,13 +1,16 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import DaySelector from '../components/DaySelector.vue';
 import SessionSchedule from '../components/SessionSchedule.vue';
 import WeekSelector from '../components/WeekSelector.vue';
 
+import { getSessionsFromDates } from '../API/sessions';
+
 const daySelected = ref();
 const dateSelected = ref(new Date());
 const weekStartSelected = ref();
+const sessionsList = ref([]);
 
 const handleDaySelected = day => {
     daySelected.value = day;
@@ -49,6 +52,21 @@ const updateDateSelected = (daySelected, weekStart) => {
     }
     return newDateSelected;
 };
+
+const fetchSessions = async () => {
+    const diff = weekStartSelected.value.getDate() + 6;
+    let weekEnd = new Date(weekStartSelected.value);
+    weekEnd.setDate(diff);
+    const weekStartString = weekStartSelected.value.toISOString().split("T")[0];
+    const weekEndString = weekEnd.toISOString().split("T")[0];
+    sessionsList.value = await getSessionsFromDates(weekStartString, weekEndString);
+};
+
+onMounted(() => {
+    fetchSessions();
+});
+
+watch(weekStartSelected, () => fetchSessions());
 </script>
 
 <template>
@@ -56,7 +74,7 @@ const updateDateSelected = (daySelected, weekStart) => {
     <WeekSelector @week-selected="handleWeekSelected" />
     <section class="schedule__content">
         <DaySelector @day-selected="handleDaySelected" />
-        <SessionSchedule :day="daySelected" :date="dateSelected" />
+        <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList" />
     </section>
 </template>
 

@@ -9,6 +9,10 @@ const props = defineProps({
     date: {
         type: Date,
         default: new Date()
+    },
+    sessionsList: {
+        type: Array,
+        default: []
     }
 });
 
@@ -56,43 +60,43 @@ let monthString = computed(() => {
     return result;
 });
 
-let sessionSchedule = [
-    {
-        timeStart: "12:30",
-        timeEnd: "14:30",
-        subject: "Geography",
-        room: "01-03",
-        tutor: "Faqih",
-        students: [],
-        capacity: 15
-    },
-    {
-        timeStart: "15:30",
-        timeEnd: "16:30",
-        subject: "Mathematics",
-        room: "01-06",
-        tutor: "Hehe",
-        students: [],
-        capacity: 15
-    },
-    {
-        timeStart: "17:30",
-        timeEnd: "18:30",
-        subject: "Physics",
-        room: "02-05",
-        tutor: "Your mother",
-        students: [],
-        capacity: 15
-    }
-];
+// let sessionSchedule = [
+//     {
+//         timeStart: "12:30",
+//         timeEnd: "14:30",
+//         subject: "Geography",
+//         room: "01-03",
+//         tutor: "Faqih",
+//         students: [],
+//         capacity: 15
+//     },
+//     {
+//         timeStart: "15:30",
+//         timeEnd: "16:30",
+//         subject: "Mathematics",
+//         room: "01-06",
+//         tutor: "Hehe",
+//         students: [],
+//         capacity: 15
+//     },
+//     {
+//         timeStart: "17:30",
+//         timeEnd: "18:30",
+//         subject: "Physics",
+//         room: "02-05",
+//         tutor: "Your mother",
+//         students: [],
+//         capacity: 15
+//     }
+// ];
 </script>
 
 <template>
     <div class="container">
         <h2 class="session__date">{{ props.day }}, {{ dateString }} {{ monthString }}</h2>
-        <article v-for="(session, index) in sessionSchedule" class="session__item"
-            :class="{ session__last: index === sessionSchedule.length - 1 }">
-            <div class="session__details">
+        <article v-for="(session, index) in sessionsList" class="session__item"
+            :class="{ session__last: index === sessionsList.length - 1 }">
+            <!-- <div class="session__details">
                 <p class="session__details-big">{{ session.timeStart }} - {{ session.timeEnd }}</p>
                 <p class="session__details-small">{{ session.subject }}</p>
                 <p class="session__details-small">Room {{ session.room }}</p>
@@ -103,7 +107,8 @@ let sessionSchedule = [
             </div>
             <div class="session__actions">
                 <button>Enroll</button>
-            </div>
+            </div> -->
+            <div>{{ session.start_at }} {{ session.end_at }}</div>
         </article>
     </div>
 </template>
