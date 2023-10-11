@@ -14,19 +14,21 @@
 
   <div id="questionContainer">
     <div v-for="(question, index) in questionArr" class="question">
-      <span class="qDetail">{{ question }}</span>
+      <span class="qDetail">{{ questionArr[index].question }}</span>
       <span class="asker">Asked by: Andy</span>
-      <div class="buttons" v-if="userGroup === 'tutor'">
-        <button class="answering">{{ questionStatus[index] }}</button>
-        <button class="mark" v-on:click="markAsAnswered(index)">Mark as answerd</button>
+      <div class="buttons" v-if="userGroup === 'TUTOR'">
+        <button id="answering"
+          :class="{ answering: !questionArr[index].is_answered, answered: questionArr[index].is_answered }">{{
+            questionArr[index].is_answered ? 'Answered' : 'Answering' }}</button>
+        <button id="mark" v-on:click="markAsAnswered(index)">Mark as answerd</button>
       </div>
-      <div class="buttons" v-if="userGroup === 'student'">
-        <button class="answering">&uarr;</button>
-        <button class="mark" v-on:click="markAsAnswered(index)">&darr;</button>
+      <div class="buttons" v-if="userGroup === 'STUDENT'">
+        <button class="vote">&uarr;</button>
+        <button class="downgrade">&darr;</button>
       </div>
     </div>
 
-    <div id="postQuestion" v-if="userGroup === 'student'">
+    <div id="postQuestion" v-if="userGroup === 'STUDENT'">
       <div id="questionInput">
         <input v-model="qInput" type="text" name="qInput" id="qInput">
       </div>
@@ -35,7 +37,73 @@
   </div>
 </template>
 
-<script src="../API/QA"></script>
+<script>
+import { postRequest } from "../API/QA";
+import { getRequest } from "../API/QA";
+import { patchStatus } from "../API/QA";
+
+export default {
+  data() {
+    return {
+      qInput: '',
+      qStatus: 'Answering',
+      newQuestion: '',
+      questionArr: [],
+      userGroup: 'TUTOR'
+    }
+  },
+
+  mounted() {
+    this.getQuestion()
+  },
+
+  methods: {
+    beAnswered() {
+      this.qStatus = 'Answered'
+    },
+
+    postQuestion() {
+      if (this.qInput !== '') {
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0dWRlbnQtMTY5NDE1MjA1MTI2NUBnbWFpbC5jb20iLCJ1dWlkIjoiNjRmYWI1OWFiNTMyYmI1ODcxMTAxNWNjIiwicm9sZSI6IlNUVURFTlQiLCJpYXQiOjE2OTQxNTIxODN9.e2o1SHnZwwFid-s_6pIFEbr1zBAdcJOXHx-8L-2WVNw'
+
+        postRequest(this.qInput, token)
+          .then(response => {
+            console.log(response.data);
+            this.getQuestion()
+          })
+          .catch(error => {
+            console.error(error);
+          })
+        // this.questionArr.push(this.qInput)
+        // this.questionStatus.push('Answering')
+        this.qInput = ''
+      }
+    },
+
+    getQuestion() {
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0dWRlbnQtMTY5NDE1MjA1MTI2NUBnbWFpbC5jb20iLCJ1dWlkIjoiNjRmYWI1OWFiNTMyYmI1ODcxMTAxNWNjIiwicm9sZSI6IlNUVURFTlQiLCJpYXQiOjE2OTQxNTIxODN9.e2o1SHnZwwFid-s_6pIFEbr1zBAdcJOXHx-8L-2WVNw'
+
+      getRequest(token)
+        .then(data => {
+          this.questionArr = data;
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        })
+    },
+
+    markAsAnswered(index) {
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InR1dG9yLTE2OTQxNTIyNDcxODNAZ21haWwuY29tIiwidXVpZCI6IjY0ZmFiNjNlNDQ0NWNjNjg4M2JmNDUyMCIsInJvbGUiOiJUVVRPUiIsImlhdCI6MTY5NDE1MjI4MX0.3giYtdHvqJO7CDtmVh8NulymrC6QiSzs4Eb5q_cxePE'
+
+      const mark = 'true'
+
+      let qID = this.questionArr[index]._id
+      patchStatus(mark, token, qID)
+      this.getQuestion()
+    }
+  }
+}
+</script>
 
 <style scoped>
 @import url(../assets/main.css);
@@ -115,20 +183,20 @@
   /* border-radius: 15px; */
 }
 
-.answering,
-.mark {
+#answering,
+#mark {
   width: 150px;
   height: 30px;
   border-radius: 15px;
   border: none;
 }
 
-.mark:hover {
+#mark:hover {
   background: aqua;
 }
 
 #postQuestion {
-  position: absolute;
+  position: sticky;
   bottom: 10px;
   width: 80%;
   height: 52px;
