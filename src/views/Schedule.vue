@@ -54,19 +54,15 @@ const updateDateSelected = (daySelected, weekStart) => {
 };
 
 const fetchSessions = async () => {
-    const diff = weekStartSelected.value.getDate() + 6;
-    let weekEnd = new Date(weekStartSelected.value);
-    weekEnd.setDate(diff);
-    const weekStartString = weekStartSelected.value.toISOString().split("T")[0];
-    const weekEndString = weekEnd.toISOString().split("T")[0];
-    sessionsList.value = await getSessionsFromDates(weekStartString, weekEndString);
+    const dateString = dateSelected.value.toISOString().split("T")[0];
+    sessionsList.value = await getSessionsFromDates(dateString, dateString);
 };
 
 onMounted(() => {
     fetchSessions();
 });
 
-watch(weekStartSelected, () => fetchSessions());
+watch(dateSelected, () => fetchSessions());
 </script>
 
 <template>
