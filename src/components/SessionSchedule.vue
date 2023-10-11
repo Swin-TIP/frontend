@@ -67,12 +67,12 @@ const sessionTimings = computed(() => {
         const sessionEndDateObj = new Date(session.end_at);
         const sessionStartTime =
             `${sessionStartDateObj.getHours() < 10
-            ? '0' + sessionStartDateObj.getHours() : sessionStartDateObj.getHours()}:${sessionStartDateObj.getMinutes() < 10 
-            ? '0' + sessionStartDateObj.getMinutes() : sessionStartDateObj.getMinutes()}`;
-        const sessionEndTime = 
+                ? '0' + sessionStartDateObj.getHours() : sessionStartDateObj.getHours()}:${sessionStartDateObj.getMinutes() < 10
+                    ? '0' + sessionStartDateObj.getMinutes() : sessionStartDateObj.getMinutes()}`;
+        const sessionEndTime =
             `${sessionEndDateObj.getHours() < 10
-            ? '0' + sessionEndDateObj.getHours() : sessionEndDateObj.getHours()}:${sessionEndDateObj.getMinutes() < 10
-            ? '0' + sessionEndDateObj.getMinutes() : sessionEndDateObj.getMinutes()}`;
+                ? '0' + sessionEndDateObj.getHours() : sessionEndDateObj.getHours()}:${sessionEndDateObj.getMinutes() < 10
+                    ? '0' + sessionEndDateObj.getMinutes() : sessionEndDateObj.getMinutes()}`;
         const sessionTiming = `${sessionStartTime} - ${sessionEndTime}`;
         timings.push(sessionTiming);
     });
@@ -90,16 +90,18 @@ const sessionTimings = computed(() => {
                 <p class="session__details-small">Students: {{ session.students.length }}/{{ session.room.capacity }}</p>
                 <p class="session__details-small">Room {{ session.room.name.split("m")[1] }}</p>
             </div>
-            <div class="session__attendees" v-for="tutor in session.tutors">
-                <p class="session__details-big">Tutor: {{ tutor.name }}</p>
-                <p class="session__details-small">
-                    Expertise:
-                    <span v-for="(subject, ind) in tutor.expertise">
-                        {{ subject }}<span v-if="ind !== tutor.expertise.length - 1">, </span>
-                    </span>
-                </p>
+            <div v-if="session.tutors.length !== 0" class="session__tutors">
+                <div class="session__tutors-each" v-for="tutor in session.tutors">
+                    <p class="session__details-big">Tutor: {{ tutor.name }}</p>
+                    <p class="session__details-small">
+                        Expertise:
+                        <span v-for="(subject, ind) in tutor.expertise">
+                            {{ subject }}<span v-if="ind !== tutor.expertise.length - 1">, </span>
+                        </span>
+                    </p>
+                </div>
             </div>
-            <div v-if="session.tutors.length === 0" class="session__attendees">
+            <div v-if="session.tutors.length === 0" class="session__tutors">
                 <p class="session__details-big">Tutor: None</p>
             </div>
             <div class="session__actions">
@@ -112,6 +114,8 @@ const sessionTimings = computed(() => {
 <style scoped>
 .container {
     background-color: #F0F0F0;
+    height: 600px;
+    overflow: auto;
 }
 
 .session__date {
@@ -128,6 +132,16 @@ const sessionTimings = computed(() => {
 
 .session__last {
     border-bottom: 1px solid #B3B3B3;
+}
+
+.session__details {
+    display: flex;
+    flex-direction: column;
+}
+
+.session__tutors {
+    display: flex;
+    flex-direction: column;
 }
 
 .session__details-big,
