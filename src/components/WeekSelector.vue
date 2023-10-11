@@ -31,9 +31,9 @@ onMounted(() => {
 
 <template>
     <section class="container">
-        <button @click="previousWeekHandler">&lt; PREV</button>
+        <button class="selector__button" @click="previousWeekHandler">&lt; PREV</button>
         <span>{{ dateStartString }} - {{ dateEndString }}</span>
-        <button @click="nextWeekHandler">NEXT &gt;</button>
+        <button class="selector__button" @click="nextWeekHandler">NEXT &gt;</button>
     </section>
 </template>
 
@@ -41,7 +41,19 @@ onMounted(() => {
 .container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: #F5F5FA;
     padding: 10px;
+}
+
+.selector__button {
+    width: 80px;
+    height: 30px;
+    background-color: azure;
+}
+
+.selector__button:hover {
+    color: azure;
+    background-color: #4ADEFF;
 }
 </style>

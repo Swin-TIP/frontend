@@ -1,6 +1,8 @@
 <script setup>
 import { computed, defineProps } from 'vue';
 
+import { User } from '../store/user';
+
 const props = defineProps({
     day: {
         type: String,
@@ -105,7 +107,8 @@ const sessionTimings = computed(() => {
                 <p class="session__details-big">Tutor: None</p>
             </div>
             <div class="session__actions">
-                <button>Enroll</button>
+                <button v-if="User.getRole() === 'TUTOR'">Enroll</button>
+                <button v-if="User.getRole() === 'STUDENT'">Register</button>
             </div>
         </article>
     </div>
@@ -126,6 +129,7 @@ const sessionTimings = computed(() => {
 .session__item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border-top: 1px solid #B3B3B3;
     padding: 0 10px;
 }

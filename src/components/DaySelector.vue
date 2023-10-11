@@ -52,7 +52,6 @@ onMounted(() => {
     width: 70px;
     border: 1px solid #B3B3B3;
     background-color: #F0F0F0;
-    cursor: pointer;
 }
 
 .active {
