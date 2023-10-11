@@ -60,55 +60,51 @@ let monthString = computed(() => {
     return result;
 });
 
-// let sessionSchedule = [
-//     {
-//         timeStart: "12:30",
-//         timeEnd: "14:30",
-//         subject: "Geography",
-//         room: "01-03",
-//         tutor: "Faqih",
-//         students: [],
-//         capacity: 15
-//     },
-//     {
-//         timeStart: "15:30",
-//         timeEnd: "16:30",
-//         subject: "Mathematics",
-//         room: "01-06",
-//         tutor: "Hehe",
-//         students: [],
-//         capacity: 15
-//     },
-//     {
-//         timeStart: "17:30",
-//         timeEnd: "18:30",
-//         subject: "Physics",
-//         room: "02-05",
-//         tutor: "Your mother",
-//         students: [],
-//         capacity: 15
-//     }
-// ];
+const sessionTimings = computed(() => {
+    const timings = [];
+    props.sessionsList.forEach(session => {
+        const sessionStartDateObj = new Date(session.start_at);
+        const sessionEndDateObj = new Date(session.end_at);
+        const sessionStartTime =
+            `${sessionStartDateObj.getHours() < 10
+            ? '0' + sessionStartDateObj.getHours() : sessionStartDateObj.getHours()}:${sessionStartDateObj.getMinutes() < 10 
+            ? '0' + sessionStartDateObj.getMinutes() : sessionStartDateObj.getMinutes()}`;
+        const sessionEndTime = 
+            `${sessionEndDateObj.getHours() < 10
+            ? '0' + sessionEndDateObj.getHours() : sessionEndDateObj.getHours()}:${sessionEndDateObj.getMinutes() < 10
+            ? '0' + sessionEndDateObj.getMinutes() : sessionEndDateObj.getMinutes()}`;
+        const sessionTiming = `${sessionStartTime} - ${sessionEndTime}`;
+        timings.push(sessionTiming);
+    });
+    return timings;
+});
 </script>
 
 <template>
     <div class="container">
         <h2 class="session__date">{{ props.day }}, {{ dateString }} {{ monthString }}</h2>
-        <article v-for="(session, index) in sessionsList" class="session__item"
+        <article v-if="sessionsList.length !== 0" v-for="(session, index) in sessionsList" class="session__item"
             :class="{ session__last: index === sessionsList.length - 1 }">
-            <!-- <div class="session__details">
-                <p class="session__details-big">{{ session.timeStart }} - {{ session.timeEnd }}</p>
-                <p class="session__details-small">{{ session.subject }}</p>
-                <p class="session__details-small">Room {{ session.room }}</p>
+            <div class="session__details">
+                <p class="session__details-big">{{ sessionTimings[index] }}</p>
+                <p class="session__details-small">Students: {{ session.students.length }}/{{ session.room.capacity }}</p>
+                <p class="session__details-small">Room {{ session.room.name.split("m")[1] }}</p>
             </div>
-            <div class="session__attendees">
-                <p class="session__details-big">Tutor: {{ session.tutor }}</p>
-                <p class="session__details-small">Students: {{ session.students.length }}/{{ session.capacity }}</p>
+            <div class="session__attendees" v-for="tutor in session.tutors">
+                <p class="session__details-big">Tutor: {{ tutor.name }}</p>
+                <p class="session__details-small">
+                    Expertise:
+                    <span v-for="(subject, ind) in tutor.expertise">
+                        {{ subject }}<span v-if="ind !== tutor.expertise.length - 1">, </span>
+                    </span>
+                </p>
+            </div>
+            <div v-if="session.tutors.length === 0" class="session__attendees">
+                <p class="session__details-big">Tutor: None</p>
             </div>
             <div class="session__actions">
                 <button>Enroll</button>
-            </div> -->
-            <div>{{ session.start_at }} {{ session.end_at }}</div>
+            </div>
         </article>
     </div>
 </template>
