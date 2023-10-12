@@ -1,7 +1,9 @@
 import { reactive } from "vue";
 
 export const User = reactive({
-    create() {
+    create(role, token) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
         localStorage.setItem("approved", false);
         localStorage.setItem("registeredClasses", JSON.stringify([]));
     },
