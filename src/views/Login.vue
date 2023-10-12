@@ -20,7 +20,7 @@ const handleLogin = async () => {
         } else {
             localStorage.setItem("token", data.accessToken);
             localStorage.setItem("role", data.role);
-            User.create(data.role, data.accessToken);
+            User.create();
             router.push("/");
         }
     }

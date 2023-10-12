@@ -1,42 +1,44 @@
 import { reactive } from "vue";
 
 export const User = reactive({
-  create(role, token) {
-    this.approved = false;
-    this.role = role;
-    this.token = token;
-    this.registeredClasses = [];
+  create() {
+    localStorage.setItem("approved", false);
+    localStorage.setItem("registeredClasses", JSON.stringify([]));
   },
   getApprovedStaus() {
-    return this.approved;
+    return localStorage.approved;
   },
   setApproved() {
-    this.approved = true;
+    localStorage.approved = true;
   },
   getRole() {
-    return this.role;
+    return localStorage.getItem("role");
   },
   setRole(role) {
-    this.role = role;
+    localStorage.setItem("role", role);
   },
   isAuthenticated() {
-    return !!this.token;
+    return !!localStorage.getItem("token");
   },
   login(role, token) {
-    this.role = role;
-    this.token = token;
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
   },
   logout() {
-    this.token = null;
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("approved");
+    localStorage.removeItem("registeredClasses");
   },
   getToken() {
-    return this.token;
+    return localStorage.token;
   },
   getRegisteredClasses() {
-    return this.registeredClasses;
+    return JSON.parse(localStorage.registeredClasses);
   },
   addRegisteredClass(classToRegister) {
-    this.registeredClasses.push(classToRegister);
-    return this.registeredClasses;
+    const registeredClasses = JSON.parse(localStorage.registeredClasses);
+    registeredClasses = [...registeredClasses, classToRegister];
+    localStorage.registeredClasses = JSON.stringify(registeredClasses);
   }
 });
