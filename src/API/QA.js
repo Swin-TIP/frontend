@@ -1,6 +1,6 @@
-import axios from "axios"
+import axios from "axios";
 
-const API_URL = "https://swinburne-398109.ts.r.appspot.com/api"
+const API_URL = "https://swinburne-398109.ts.r.appspot.com/api";
 
 export const postRequest = (inputText, token) => {
   const headers = {

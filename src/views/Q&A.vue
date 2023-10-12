@@ -1,12 +1,12 @@
 <template>
   <div id="header">
-    Q&A board
+    <h1>Q&A board</h1>
   </div>
 
   <div id="title">
-    <div id="subject">
+    <h1 id="subject">
       Mathmatics
-    </div>
+    </h1>
     <div id="date">
       123456
     </div>
@@ -15,7 +15,7 @@
   <div id="questionContainer">
     <div v-for="(question, index) in questionArr" class="question">
       <span class="qDetail">{{ questionArr[index].question }}</span>
-      <span class="asker">Asked by: Andy</span>
+      <span class="asker">Asked by: {{ `${questionArr[index].raised_by.name}` }}</span>
       <div class="buttons" v-if="userGroup === 'TUTOR'">
         <button id="answering"
           :class="{ answering: !questionArr[index].is_answered, answered: questionArr[index].is_answered }">{{
@@ -41,15 +41,15 @@
 import { postRequest } from "../API/QA";
 import { getRequest } from "../API/QA";
 import { patchStatus } from "../API/QA";
+import { User } from "../store/user";
 
 export default {
   data() {
     return {
       qInput: '',
-      qStatus: 'Answering',
       newQuestion: '',
       questionArr: [],
-      userGroup: 'TUTOR'
+      userGroup: 'STUDENT'
     }
   },
 
@@ -74,8 +74,6 @@ export default {
           .catch(error => {
             console.error(error);
           })
-        // this.questionArr.push(this.qInput)
-        // this.questionStatus.push('Answering')
         this.qInput = ''
       }
     },
@@ -99,7 +97,13 @@ export default {
 
       let qID = this.questionArr[index]._id
       patchStatus(mark, token, qID)
-      this.getQuestion()
+      getRequest(token)
+        .then(data => {
+          this.questionArr = data;
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        })
     }
   }
 }
@@ -108,23 +112,26 @@ export default {
 <style scoped>
 @import url(../assets/main.css);
 
-#header {
+/* #header {
   margin-left: 20px;
-  font-size: 45px;
+  font-size: 30px;
   font-weight: bolder;
-}
+} */
 
-#title {
+/* #title {
   margin-top: 40px;
   margin-left: 30px;
   top: 100px;
-}
+} */
 
-#subject {
+/* #subject {
   font-size: 35px;
-}
+} */
 
 #date {
+  /* margin-top: 40px; */
+  margin-left: 30px;
+  top: 100px;
   font-size: 19px;
   color: #707070;
 }
