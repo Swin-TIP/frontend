@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 
 import { login } from '../API/auth';
+import { User } from '../store/user';
 import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 
 const router = useRouter();
@@ -19,6 +20,7 @@ const handleLogin = async () => {
         } else {
             localStorage.setItem("token", data.accessToken);
             localStorage.setItem("role", data.role);
+            User.create(data.role, data.accessToken);
             router.push("/");
         }
     }
@@ -84,6 +86,7 @@ label {
 
 button {
     height: 2.5em;
+    width: 100%;
     margin-top: 0.5em;
     border: none;
     border-radius: 10px;

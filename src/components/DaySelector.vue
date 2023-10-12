@@ -1,11 +1,18 @@
 <script setup>
-import { ref } from 'vue';
+import { defineEmits, onMounted, ref } from 'vue';
+
+const emit = defineEmits(["day-selected"]);
 
 let activeDay = ref("Monday");
 
 const makeDayActive = (day) => {
     activeDay.value = day;
+    emit('day-selected', day);
 };
+
+onMounted(() => {
+    emit('day-selected', activeDay.value);
+});
 </script>
 
 <template>
@@ -45,7 +52,6 @@ const makeDayActive = (day) => {
     width: 70px;
     border: 1px solid #B3B3B3;
     background-color: #F0F0F0;
-    cursor: pointer;
 }
 
 .active {

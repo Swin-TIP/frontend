@@ -9,6 +9,12 @@ import Register from './views/Register.vue';
 import QA from './views/Q&A.vue'
 import Students from './views/Students.vue';
 
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
 import './assets/main.css';
 
 // Define routes
@@ -31,6 +37,12 @@ const router = createRouter({
   routes
 })
 
+const vuetify = createVuetify({
+  components,
+  directives,
+})
+
 createApp(App)
+  .use(vuetify)
   .use(router)
   .mount('#app');
