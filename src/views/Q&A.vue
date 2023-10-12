@@ -16,19 +16,19 @@
     <div v-for="(question, index) in questionArr" class="question">
       <span class="qDetail">{{ questionArr[index].question }}</span>
       <span class="asker">Asked by: {{ `${questionArr[index].raised_by.name}` }}</span>
-      <div class="buttons" v-if="userGroup === 'TUTOR'">
+      <div class="buttons" v-if="role === 'TUTOR'">
         <button id="answering"
           :class="{ answering: !questionArr[index].is_answered, answered: questionArr[index].is_answered }">{{
             questionArr[index].is_answered ? 'Answered' : 'Answering' }}</button>
         <button id="mark" v-on:click="markAsAnswered(index)">Mark as answerd</button>
       </div>
-      <div class="buttons" v-if="userGroup === 'STUDENT'">
+      <div class="buttons" v-if="role === 'STUDENT'">
         <button class="vote">&uarr;</button>
         <button class="downgrade">&darr;</button>
       </div>
     </div>
 
-    <div id="postQuestion" v-if="userGroup === 'STUDENT'">
+    <div id="postQuestion" v-if="role === 'STUDENT'">
       <div id="questionInput">
         <input v-model="qInput" type="text" name="qInput" id="qInput">
       </div>
@@ -49,7 +49,7 @@ export default {
       qInput: '',
       newQuestion: '',
       questionArr: [],
-      userGroup: 'STUDENT'
+      role: User.getRole()
     }
   },
 
@@ -64,7 +64,7 @@ export default {
 
     postQuestion() {
       if (this.qInput !== '') {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0dWRlbnQtMTY5NDE1MjA1MTI2NUBnbWFpbC5jb20iLCJ1dWlkIjoiNjRmYWI1OWFiNTMyYmI1ODcxMTAxNWNjIiwicm9sZSI6IlNUVURFTlQiLCJpYXQiOjE2OTQxNTIxODN9.e2o1SHnZwwFid-s_6pIFEbr1zBAdcJOXHx-8L-2WVNw'
+        const token = User.getToken()
 
         postRequest(this.qInput, token)
           .then(response => {
@@ -79,7 +79,7 @@ export default {
     },
 
     getQuestion() {
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0dWRlbnQtMTY5NDE1MjA1MTI2NUBnbWFpbC5jb20iLCJ1dWlkIjoiNjRmYWI1OWFiNTMyYmI1ODcxMTAxNWNjIiwicm9sZSI6IlNUVURFTlQiLCJpYXQiOjE2OTQxNTIxODN9.e2o1SHnZwwFid-s_6pIFEbr1zBAdcJOXHx-8L-2WVNw'
+      const token = User.getToken()
 
       getRequest(token)
         .then(data => {
@@ -91,7 +91,7 @@ export default {
     },
 
     markAsAnswered(index) {
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InR1dG9yLTE2OTQxNTIyNDcxODNAZ21haWwuY29tIiwidXVpZCI6IjY0ZmFiNjNlNDQ0NWNjNjg4M2JmNDUyMCIsInJvbGUiOiJUVVRPUiIsImlhdCI6MTY5NDE1MjI4MX0.3giYtdHvqJO7CDtmVh8NulymrC6QiSzs4Eb5q_cxePE'
+      const token = User.getToken()
 
       const mark = 'true'
 
@@ -196,6 +196,10 @@ export default {
   height: 30px;
   border-radius: 15px;
   border: none;
+}
+
+#answering {
+  color: rgb(var(--DANGER));
 }
 
 #mark:hover {
