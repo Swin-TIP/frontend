@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Overpass:wght@600&family=Poppins&display=swap');
 
+:root {
+    --PRIMARY: 74, 222, 255;
+    --PRIMARY-STROKE: 68, 194, 222;
+    --DANGER: 255, 74, 74;
+    --DANGER-STROKE: 211, 61, 61;
+    --DISABLED: 112, 112, 112;
+    --DISABLED-STROKE: 130, 128, 128;
+    --GREY-BACKGROUND: 240, 240, 240;
+    --GREY-BORDER: 179, 179, 179;
+    --GREY-SMALL: 135, 135, 135;
+}
+
 body {
     font-family: Poppins, sans-serif;
     margin: 0;
@@ -8,4 +20,13 @@ body {
 h1 {
     font-size: 1.5em;
     margin-left: 20px;
+}
+
+button {
+    width: 120px;
+    height: 40px;
+    background-color: #4ADEFF;
+    border: 1px solid #44C2DE;
+    border-radius: 15px;
+    cursor: pointer;
 }
