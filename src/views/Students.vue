@@ -1,20 +1,38 @@
 <template>
-  <v-container>
+  <!-- Display user table only after the data is fetched from the server -->
+  <v-container v-if="state.students.length">
     <div class="menu__container">
       <!--Search bar-->
-      <v-text-field
-        density="compact"
-        placeholder="Search by name"
-        variant="solo"
-        append-inner-icon="mdi-magnify"
-        single-line
-        hide-details
-      ></v-text-field>
-
-      <v-btn size="small" color="error" @click="deleteSelected">Delete</v-btn>
-      <v-btn size="small" color="primary" @click="approveSelected">Approve</v-btn>
+      <div class="input__username">
+        <v-text-field
+          density="compact"
+          placeholder="Search by name or email"
+          variant="solo"
+          append-inner-icon="mdi-magnify"
+          single-line
+          hide-details
+          v-model="searchQuery"
+        ></v-text-field>
+        <v-btn size="small" color="info" @click="searchStudentsByName">Search</v-btn>
+      </div>
+      <div class="button__div">
+        <v-btn size="small" color="error" @click="deleteSelected">UnApprove</v-btn>
+        <v-btn size="small" color="primary" @click="approveSelected">Approve</v-btn>
+      </div>
     </div>
-    <v-table v-if="users.length" class="table__students" density="compact">
+
+    <!-- Show loading when the user data is being fetched from the server  -->
+    <v-container v-if="state.loading">
+      <v-banner-text color="primary">Loading...</v-banner-text>
+      <v-progress-linear indeterminate color="primary"> </v-progress-linear>
+    </v-container>
+
+    <!-- Show error message when the user data is not fetched from the server  -->
+    <v-container v-if="state.error">
+      <v-banner-text color="error">Error: {{ state.error }}</v-banner-text>
+    </v-container>
+
+    <v-table v-if="state.students.length" class="table__students" density="compact">
       <thead>
         <tr>
           <th><input type="checkbox" v-model="selectAll" @change="toggleSelectAll" /></th>
@@ -25,9 +43,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
-          <td><input type="checkbox" v-model="selectedUsers" :value="user.id" /></td>
-          <td>{{ user.id }}</td>
+        <tr v-for="user in state.students" :key="user.id">
+          <td><input type="checkbox" v-model="selectedUsers" :value="user._id" /></td>
+          <td>{{ user._id }}</td>
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>
@@ -38,66 +56,71 @@
         </tr>
       </tbody>
     </v-table>
-    <v-pagination :length="5"></v-pagination>
   </v-container>
 </template>
 
-<!-- Javascript -->
 <script>
+import { onMounted, ref } from 'vue'
+import { useStudentsStore } from '@/store/students'
+
 export default {
-  // TODO: Fetch data from the backend
-  data() {
-    return {
-      // Dummy users. They are hardcoded for now. later we will fetch them from the backend
-      users: [
-        { id: '1', name: 'Joe Doe-1', email: 'joe-doe1@gmail.com', approved: true },
-        { id: '2', name: 'Joe Doe-2', email: 'joe-doe2@gmail.com', approved: true },
-        { id: '3', name: 'Joe Doe-3', email: 'joe-doe3@gmail.com', approved: true },
-        { id: '4', name: 'Joe Doe-4', email: 'joe-doe4@gmail.com', approved: true },
-        { id: '5', name: 'Joe Doe-5', email: 'joe-doe5@gmail.com', approved: true },
-        { id: '6', name: 'Joe Doe-6', email: 'joe-doe6@gmail.com', approved: false },
-        { id: '7', name: 'Joe Doe-7', email: 'joe-doe7@gmail.com', approved: false },
-        { id: '8', name: 'Joe Doe-8', email: 'joe-doe8@gmail.com', approved: false },
-        { id: '9', name: 'Joe Doe-9', email: 'joe-doe9@gmail.com', approved: false },
-        { id: '10', name: 'Joe Doe-10', email: 'joe-doe10@gmail.com', approved: false }
-      ],
-      selectedUsers: [], // store selected users
-      selectAll: false // Flag to indicate select all status
+  setup() {
+    const { state, getStudentsList, fetchStudentByName, setStudentApproval } = useStudentsStore()
+
+    onMounted(() => {
+      getStudentsList()
+    })
+
+    const selectedUsers = ref([])
+    const selectAll = ref(false)
+    const searchQuery = ref('') // Add a reference for the search query
+
+    const searchStudentsByName = () => {
+      fetchStudentByName(searchQuery.value)
     }
-  },
-  methods: {
-    // TODO: Call backend API
-    deleteSelected() {
-      this.users = this.users.filter((user) => !this.selectedUsers.includes(user.id))
-      this.selectedUsers = []
-    },
-    // TODO: Call backend API
-    approveSelected() {
-      this.users = this.users.map((user) => {
-        if (this.selectedUsers.includes(user.id)) {
-          user.approved = true
-        }
-        return user
-      })
-      this.selectedUsers = []
-    },
-    toggleSelectAll() {
-      if (this.selectAll) {
-        this.selectedUsers = this.users.map((user) => user.id)
+
+    const deleteSelected = async () => {
+      for (let userId of selectedUsers.value) {
+        await setStudentApproval(userId, false)
+      }
+      selectedUsers.value = []
+    }
+
+    const approveSelected = async () => {
+      for (let userId of selectedUsers.value) {
+        await setStudentApproval(userId, true)
+      }
+      selectedUsers.value = []
+    }
+
+    const toggleSelectAll = () => {
+      if (selectAll.value) {
+        selectedUsers.value = state.students.map((user) => user._id)
       } else {
-        this.selectedUsers = []
+        selectedUsers.value = []
       }
     }
+
+    return {
+      state,
+      selectedUsers,
+      selectAll,
+      deleteSelected,
+      approveSelected,
+      toggleSelectAll,
+      searchQuery,
+      searchStudentsByName
+    }
   },
+
   watch: {
     selectedUsers(newVal) {
-      this.selectAll = newVal.length === this.users.length
+      this.selectAll = newVal.length === this.state.students.length
     }
   }
 }
 </script>
 
-<!-- CSS -->
 <style scoped>
 .menu__container {
   gap: 10px;
@@ -107,8 +130,30 @@ export default {
   align-items: center;
 }
 
+.input__username {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  border-right: 2px solid #ccc;
+  padding-right: 10px;
+}
+
+.button__div {
+  display: flex;
+  gap: 10px;
+}
+
 .table__students {
   border: 1px solid #ccc;
   font-size: 14px;
+}
+
+.table__students tbody tr:nth-child(odd) {
+  background-color: #f5f5fa;
+}
+
+.table__students tbody tr:nth-child(even) {
+  background-color: #fff;
 }
 </style>
