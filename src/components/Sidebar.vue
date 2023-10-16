@@ -28,8 +28,14 @@ const handleLogout = () => {
                     to="/sessions">Registered
                     Sessions</router-link>
                 <router-link v-if="userRole === 'ADMIN'" class="sidenav__link"
+                    :class="{ active: currentRoute === '/tutors' }" to="/tutors">
+                    Tutors</router-link>
+                <router-link v-if="userRole === 'ADMIN'" class="sidenav__link"
                     :class="{ active: currentRoute === '/students' }" to="/students">
                     Students</router-link>
+                <router-link v-if="userRole === 'ADMIN'" class="sidenav__link"
+                    :class="{ active: currentRoute === '/resources' }" to="/resources">
+                    Resources</router-link>
             </nav>
         </div>
         <router-link @click.native="handleLogout" class="sidenav__link sidenav__logout" to="/login">Logout</router-link>

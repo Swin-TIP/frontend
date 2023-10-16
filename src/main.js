@@ -7,6 +7,8 @@ import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
 import Register from './views/Register.vue';
 import Students from './views/Students.vue';
+import Tutors from './views/Tutors.vue';
+import Resources from './views/Resources.vue';
 
 // Vuetify
 // import 'vuetify/styles'
@@ -24,6 +26,8 @@ const routes = [
             { path: '/sessions', component: Sessions },
             { path: '/schedule', component: Schedule },
             { path: '/students', component: Students },
+            { path: '/tutors', component: Tutors },
+            { path: '/resources', component: Resources },
         ]
     },
     { path: '/login', component: Login },
