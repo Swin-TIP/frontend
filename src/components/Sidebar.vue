@@ -57,7 +57,7 @@ const handleLogout = () => {
     padding: 1em 1.5em;
 }
 
-å .sidenav__logo {
+.sidenav__logo {
     height: 35px;
 }
 
