@@ -21,7 +21,6 @@ const handleLogout = () => {
                 <h1 class="sidenav__title">Bright Boost</h1>
             </div>
             <nav>
-                <router-link class="sidenav__link" :class="{ active: currentRoute === '/' }" to="/">Home</router-link>
                 <router-link class="sidenav__link" :class="{ active: currentRoute === '/schedule' }" to="/schedule">Session
                     Schedule</router-link>
                 <router-link class="sidenav__link" :class="{ active: currentRoute === '/sessions' }"

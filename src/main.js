@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue'
 import Sessions from './views/Sessions.vue';
-import Home from './Home.vue';
+import MainLayout from './MainLayout.vue';
 import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
 import Register from './views/Register.vue';
@@ -13,7 +13,7 @@ import './assets/main.css';
 // Define routes
 const routes = [
     {
-        path: '/', component: Home,
+        path: '/', redirect: '/schedule', component: MainLayout,
         children: [
             { path: '/sessions', component: Sessions },
             { path: '/schedule', component: Schedule },
