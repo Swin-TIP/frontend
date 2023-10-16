@@ -85,8 +85,8 @@ const handleRegister = async () => {
 
 .title {
     text-align: center;
-    font-size: 1.5em;
     margin-bottom: 1em;
+    margin-left: 0;
 }
 
 input,
