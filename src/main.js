@@ -9,7 +9,7 @@ import Register from './views/Register.vue';
 import Students from './views/Students.vue';
 
 // Vuetify
-import 'vuetify/styles'
+// import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -36,8 +36,8 @@ const router = createRouter({
 })
 
 const vuetify = createVuetify({
-  components,
-  directives,
+    components,
+    directives,
 })
 
 createApp(App)
