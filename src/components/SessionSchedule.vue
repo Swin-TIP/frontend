@@ -15,6 +15,10 @@ const props = defineProps({
     sessionsList: {
         type: Array,
         default: []
+    },
+    registeredView: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -80,6 +84,11 @@ const sessionTimings = computed(() => {
     });
     return timings;
 });
+
+const handleClick = (action, id) => {
+    console.log(action);
+    console.log(id);
+};
 </script>
 
 <template>
@@ -106,9 +115,13 @@ const sessionTimings = computed(() => {
             <div v-if="session.tutors.length === 0" class="session__tutors">
                 <p class="session__details-big">Tutor: None</p>
             </div>
-            <div class="session__actions">
-                <button v-if="User.getRole() === 'TUTOR'">Enroll</button>
-                <button v-if="User.getRole() === 'STUDENT'">Register</button>
+            <div v-if="!props.registeredView" class="session__actions">
+                <button v-if="User.getRole() === 'TUTOR'" @click="handleClick('enroll', session._id)">Enroll</button>
+                <button v-if="User.getRole() === 'STUDENT'" @click="handleClick('register', session._id)">Register</button>
+            </div>
+            <div v-if="props.registeredView" class="session__actions">
+                <button @click="handleClick('Q&A Board', session._id)">Q&A Board</button>
+                <button class="session__actions-cancel" @click="handleClick('cancel', session._id)">Cancel</button>
             </div>
         </article>
     </div>
@@ -156,5 +169,16 @@ const sessionTimings = computed(() => {
 .session__details-small {
     font-size: 0.75em;
     color: #878787;
+}
+
+.session__actions {
+    display: flex;
+    justify-content: space-around;
+    width: 250px;
+}
+
+.session__actions-cancel {
+    background-color: rgb(var(--DANGER));
+    border: 1px solid rgb(var(--DANGER-STROKE));
 }
 </style>
