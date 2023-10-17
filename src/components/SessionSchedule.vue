@@ -1,7 +1,10 @@
 <script setup>
 import { computed, defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { User } from '../store/user';
+
+const router = useRouter();
 
 const props = defineProps({
     day: {
@@ -88,6 +91,11 @@ const sessionTimings = computed(() => {
 const handleClick = (action, id) => {
     console.log(action);
     console.log(id);
+    switch (action) {
+        case "Q&A Board":
+            router.push("/question");
+            break;
+    }
 };
 </script>
 
