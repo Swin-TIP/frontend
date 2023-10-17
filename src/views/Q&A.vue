@@ -4,25 +4,30 @@
   </div>
 
   <div id="title">
-    <h1 id="subject">
-      Mathmatics
+    <h1 id="subject" v-for="(subject, index) in subjects" :key="index">
+      {{ subjects[index] }}
     </h1>
     <div id="date">
-      123456
+      {{ startAt }} ~ {{ endAt }}
     </div>
   </div>
 
   <div id="questionContainer">
     <div v-for="(question, index) in questionArr" class="question">
       <span class="qDetail">{{ questionArr[index].question }}</span>
-      <span class="asker">Asked by: {{ `${questionArr[index].raised_by.name}` }}</span>
+      <span class="asker">Asked by: {{ questionArr[index].raised_by.name }}</span>
       <div class="buttons" v-if="role === 'TUTOR'">
+        <button id="answredBy" v-if="questionArr[index].is_answered === true">Answered by: {{
+          questionArr[index].answered_by.name }}</button>
         <button id="answering"
           :class="{ answering: !questionArr[index].is_answered, answered: questionArr[index].is_answered }">{{
             questionArr[index].is_answered ? 'Answered' : 'Answering' }}</button>
-        <button id="mark" v-on:click="markAsAnswered(index)">Mark as answerd</button>
+        <button id="mark" v-on:click="markAsAnswered(index)">{{ !questionArr[index].is_answered ? 'Mark as answered' :
+          'Remove answer' }}</button>
       </div>
       <div class="buttons" v-if="role === 'STUDENT'">
+        <button id="answredBy" v-if="questionArr[index].is_answered === true">Answered by: {{
+          questionArr[index].answered_by.name }}</button>
         <button class="vote">&uarr;</button>
         <button class="downgrade">&darr;</button>
       </div>
@@ -46,6 +51,10 @@ import { User } from "../store/user";
 export default {
   data() {
     return {
+      sessionId: '',
+      startAt: '',
+      endAt: '',
+      subjects: [],
       qInput: '',
       newQuestion: '',
       questionArr: [],
@@ -54,6 +63,16 @@ export default {
   },
 
   mounted() {
+    // 从LocalStorage中检索数据
+    const selectedSession = JSON.parse(localStorage.getItem('selectedSession'));
+
+    this.sessionId = selectedSession._id;
+    this.startAt = selectedSession.start_at;
+    this.endAt = selectedSession.end_at;
+    this.subjects = selectedSession.subjects;
+
+    // 现在你可以在页面中使用selectedSession中的数据
+    console.log(selectedSession);
     this.getQuestion()
   },
 
@@ -66,7 +85,9 @@ export default {
       if (this.qInput !== '') {
         const token = User.getToken()
 
-        postRequest(this.qInput, token)
+        let sID = this.sessionId
+
+        postRequest(this.qInput, token, sID)
           .then(response => {
             console.log(response.data);
             this.getQuestion()
@@ -81,7 +102,9 @@ export default {
     getQuestion() {
       const token = User.getToken()
 
-      getRequest(token)
+      let sID = this.sessionId
+
+      getRequest(token, sID)
         .then(data => {
           this.questionArr = data;
         })
@@ -96,13 +119,14 @@ export default {
       const mark = 'true'
 
       let qID = this.questionArr[index]._id
+
       patchStatus(mark, token, qID)
-      getRequest(token)
-        .then(data => {
-          this.questionArr = data;
+        .then(() => {
+          // When marked successfully, refresh the question list
+          return this.getQuestion();
         })
         .catch(error => {
-          console.error('Error fetching data:', error);
+          console.error('Error marking as answered:', error);
         })
     }
   }
