@@ -1,18 +1,11 @@
 <template>
   <!-- Display user table only after the data is fetched from the server -->
-  <v-container v-if="state.students.length">
+  <v-container class="main__container" v-if="state.students.length">
     <div class="menu__container">
       <!--Search bar-->
       <div class="input__username">
-        <v-text-field
-          density="compact"
-          placeholder="Search by name or email"
-          variant="solo"
-          append-inner-icon="mdi-magnify"
-          single-line
-          hide-details
-          v-model="searchQuery"
-        ></v-text-field>
+        <v-text-field density="compact" placeholder="Search by name or email" variant="solo"
+          append-inner-icon="mdi-magnify" single-line hide-details v-model="searchQuery"></v-text-field>
         <v-btn size="small" color="info" @click="searchStudentsByName">Search</v-btn>
       </div>
       <div class="button__div">
@@ -122,6 +115,10 @@ export default {
 </script>
 
 <style scoped>
+.main__container {
+  width: auto;
+}
+
 .menu__container {
   gap: 10px;
   display: flex;
