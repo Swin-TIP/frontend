@@ -18,9 +18,7 @@ const handleLogin = async () => {
         if (data instanceof Error) {
             console.log("Error occurred");
         } else {
-            localStorage.setItem("token", data.accessToken);
-            localStorage.setItem("role", data.role);
-            User.create();
+            User.create(data.role, data.accessToken);
             router.push("/");
         }
     }
@@ -67,8 +65,8 @@ const handleLogin = async () => {
 
 .title {
     text-align: center;
-    font-size: 1.5em;
     margin-bottom: 1em;
+    margin-left: 0;
 }
 
 input {

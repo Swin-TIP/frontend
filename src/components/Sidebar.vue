@@ -1,16 +1,17 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router'
+import { User } from '@/store/user'
+import BrightSparksLogo from '../assets/icons/brightsparks.svg'
 
-import BrightSparksLogo from '../assets/icons/brightsparks.svg';
-
-const currentRoute = useRoute().fullPath;
-const router = useRouter();
+const currentRoute = useRoute().fullPath
+const router = useRouter()
+const userRole = User.getRole()
 
 const handleLogout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  router.push("/login");
-};
+  localStorage.removeItem('token')
+  localStorage.removeItem('role')
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -21,17 +22,19 @@ const handleLogout = () => {
         <h1 class="sidenav__title">Bright Boost</h1>
       </div>
       <nav>
-        <router-link class="sidenav__link" :class="{ active: currentRoute === '/' }" to="/">Home</router-link>
         <router-link class="sidenav__link" :class="{ active: currentRoute === '/schedule' }" to="/schedule">Session
           Schedule</router-link>
         <router-link class="sidenav__link" :class="{ active: currentRoute === '/sessions' }" to="/sessions">Registered
           Sessions</router-link>
-        <!-- <router-link class="sidenav__link" :class="{ active: currentRoute === '/question' }" to="/question">Q&A
-          board</router-link> -->
-        <router-link class="sidenav__link" :class="{ active: currentRoute === '/students' }" to="/students">
+        <router-link v-if="userRole === 'ADMIN'" class="sidenav__link" :class="{ active: currentRoute === '/tutors' }"
+          to="/tutors">
+          Tutors</router-link>
+        <router-link v-if="userRole === 'ADMIN'" class="sidenav__link" :class="{ active: currentRoute === '/students' }"
+          to="/students">
           Students</router-link>
-        <router-link class="sidenav__link" :class="{ active: currentRoute === '/Tutors' }"
-          to="/Tutors">Tutors</router-link>
+        <router-link v-if="userRole === 'ADMIN'" class="sidenav__link" :class="{ active: currentRoute === '/resources' }"
+          to="/resources">
+          Resources</router-link>
       </nav>
     </div>
     <router-link @click.native="handleLogout" class="sidenav__link sidenav__logout" to="/login">Logout</router-link>
@@ -45,7 +48,7 @@ const handleLogout = () => {
   justify-content: space-between;
   height: 100vh;
   width: 24%;
-  background-color: #F5F5FA;
+  background-color: #f5f5fa;
 }
 
 .sidenav__main {
@@ -67,7 +70,6 @@ const handleLogout = () => {
   margin: 0 1em;
 }
 
-
 .sidenav__link {
   display: flex;
   align-items: center;
@@ -78,12 +80,12 @@ const handleLogout = () => {
 }
 
 .sidenav__link:hover {
-  color: #4ADEFF;
-  border-left: 4px solid #4ADEFF;
+  color: #4adeff;
+  border-left: 4px solid #4adeff;
 }
 
 .router-link-exact-active {
-  color: #4ADEFF;
-  border-left: 4px solid #4ADEFF;
+  color: #4adeff;
+  border-left: 4px solid #4adeff;
 }
 </style>

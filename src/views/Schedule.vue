@@ -70,7 +70,7 @@ watch(dateSelected, () => fetchSessions());
     <WeekSelector @week-selected="handleWeekSelected" />
     <section class="schedule__content">
         <DaySelector @day-selected="handleDaySelected" />
-        <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList" />
+        <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList" :registeredView="false" />
     </section>
 </template>
 
