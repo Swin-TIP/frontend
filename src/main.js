@@ -6,6 +6,7 @@ import MainLayout from './MainLayout.vue';
 import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
 import Register from './views/Register.vue';
+import QA from './views/Q&A.vue'
 import Students from './views/Students.vue';
 import Tutors from './views/Tutors.vue';
 import Resources from './views/Resources.vue';
@@ -20,31 +21,33 @@ import './assets/main.css';
 
 // Define routes
 const routes = [
-    {
-        path: '/', redirect: '/schedule', component: MainLayout,
-        children: [
-            { path: '/sessions', component: Sessions },
-            { path: '/schedule', component: Schedule },
-            { path: '/students', component: Students },
-            { path: '/tutors', component: Tutors },
-            { path: '/resources', component: Resources },
-        ]
-    },
-    { path: '/login', component: Login },
-    { path: '/register', component: Register }
-];
+  {
+    path: '/', redirect: '/schedule', component: MainLayout,
+    children: [
+      { path: '/sessions', component: Sessions },
+      { path: '/schedule', component: Schedule },
+      { path: '/qa', component: QA },
+      { path: '/students', component: Students },
+      { path: '/tutors', component: Tutors },
+      { path: '/resources', component: Resources },
+      { path: '/Tutors', component: Tutors }
+    ]
+  },
+  { path: '/login', component: Login },
+  { path: '/register', component: Register }
+]
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
+  history: createWebHistory(),
+  routes
 })
 
 const vuetify = createVuetify({
-    components,
-    directives,
+  components,
+  directives,
 })
 
 createApp(App)
-    .use(vuetify)
-    .use(router)
-    .mount('#app');
+  .use(vuetify)
+  .use(router)
+  .mount('#app');
