@@ -10,7 +10,6 @@ import QA from './views/Q&A.vue'
 import Students from './views/Students.vue';
 import Tutors from './views/Tutors.vue';
 import Resources from './views/Resources.vue';
-import Tutors from './views/Tutors.vue';
 
 // Vuetify
 // import 'vuetify/styles'

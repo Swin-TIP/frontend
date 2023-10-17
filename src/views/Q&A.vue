@@ -63,7 +63,7 @@ export default {
   },
 
   mounted() {
-    // 从LocalStorage中检索数据
+    // Get the session info from local storage
     const selectedSession = JSON.parse(localStorage.getItem('selectedSession'));
 
     this.sessionId = selectedSession._id;
@@ -71,8 +71,7 @@ export default {
     this.endAt = selectedSession.end_at;
     this.subjects = selectedSession.subjects;
 
-    // 现在你可以在页面中使用selectedSession中的数据
-    console.log(selectedSession);
+    //Get question list from API
     this.getQuestion()
   },
 

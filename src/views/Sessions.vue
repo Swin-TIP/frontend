@@ -90,12 +90,6 @@ watch(dateSelected, () => updateDayRegisteredSessions());
     <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="dayRegisteredSessions"
       :registeredView="true" />
   </section>
-  <div class="sessionContainer" v-for="(session, index) in sessionArr">
-    <span>{{ sessionArr[index].subjects }}</span>
-    <span>{{ sessionArr[index].start_at }}</span>
-    <span>{{ sessionArr[index].end_at }}</span>
-    <button @click="goToQAPage(index)">Q&A</button>
-  </div>
 </template>
 
 <script>
@@ -109,31 +103,32 @@ export default {
   },
   mounted() {
     localStorage.removeItem('selectedSession');
-    this.getSession()
   },
   methods: {
-    async getSession() {
-      const token = User.getToken()
+    // async getSession() {
+    //   const token = User.getToken()
 
-      const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      }
+    //   const headers = {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${token}`,
+    //   }
 
-      try {
-        const response = await axios.get(`https://swinburne-398109.ts.r.appspot.com/api/user/session/list`, { headers })
-        this.sessionArr = response.data
-        console.log(this.sessionArr);
-        return response.data
-      } catch (error) {
-        throw error
-      }
-    },
+    //   try {
+    //     const response = await axios.get(`https://swinburne-398109.ts.r.appspot.com/api/user/session/list`, { headers })
+    //     this.sessionArr = response.data
+    //     console.log(this.sessionArr);
+    //     return response.data
+    //   } catch (error) {
+    //     throw error
+    //   }
+    // },
     goToQAPage(index) {
+
+      // I used this part to store session information to transfer the data to Q&A page.
       const selectedSession = this.sessionArr[index];
       localStorage.setItem('selectedSession', JSON.stringify(selectedSession));
 
-      // 假设你的Q&A页面路径为 '/qa'
+      // I have fixed this part in SessionSchedule.vue
       this.$router.push('/qa');
     }
   }
