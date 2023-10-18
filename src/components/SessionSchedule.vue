@@ -90,9 +90,9 @@ const sessionTimings = computed(() => {
 
 const handleClick = (action, id) => {
   console.log(action);
-  console.log(id);
   switch (action) {
     case "Q&A Board":
+      localStorage.setItem('selectedSession', JSON.stringify(id));
       router.push("/qa");
       break;
   }
@@ -128,7 +128,7 @@ const handleClick = (action, id) => {
         <button v-if="User.getRole() === 'STUDENT'" @click="handleClick('register', session._id)">Register</button>
       </div>
       <div v-if="props.registeredView" class="session__actions">
-        <button @click="handleClick('Q&A Board', session._id)">Q&A Board</button>
+        <button @click="handleClick('Q&A Board', session)">Q&A Board</button>
         <button class="session__actions-cancel" @click="handleClick('cancel', session._id)">Cancel</button>
       </div>
     </article>
