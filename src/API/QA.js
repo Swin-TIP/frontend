@@ -41,3 +41,11 @@ export const patchStatus = (mark, token, qID) => {
 
   return axios.patch(`${API_URL}/qna/answer/${qID}`, patchStatus, { headers })
 }
+
+export const patchVote = async (qID) => {
+  try {
+    return axios.patch(`${API_URL}/qna/vote/${qID}`)
+  } catch (error) {
+    throw error
+  }
+}
