@@ -42,9 +42,18 @@ export const patchStatus = (mark, token, qID) => {
   return axios.patch(`${API_URL}/qna/answer/${qID}`, patchStatus, { headers })
 }
 
-export const patchVote = async (qID) => {
+export const patchVote = async (token, qID) => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    'question_id': `${qID}`
+  }
+  const body = {
+    "vote": true
+  }
+
   try {
-    return axios.patch(`${API_URL}/qna/vote/${qID}`)
+    return axios.patch(`${API_URL}/qna/vote/${qID}`, body, { headers })
   } catch (error) {
     throw error
   }

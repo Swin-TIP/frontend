@@ -38,12 +38,17 @@ export const createTutor = async (name, email, password, expertise) => {
   };
 }
 
-export const approveTutor = async (approve, user_id) => {
+export const approveTutor = async (token, approve, user_id) => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    "_id": user_id
+  }
   const approval = {
-    "approve": approve
+    "approve": !approve
   }
   try {
-    const response = await axios.patch(`${API_URL}/user/approval/${user_id}`, approval)
+    return await axios.patch(`${API_URL}/user/approval/${user_id}`, approval, { headers })
   } catch (error) {
     console.log(error);
     return new Error(error);

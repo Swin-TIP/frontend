@@ -4,6 +4,7 @@
       <!-- Search bar -->
       <input class="search-bar" type="text" placeholder="Search by name" v-model="searchKeyword">
       <div class="operate">
+        <button class="approve-button" @click="approveTutors">Approve</button>
         <button class="create-button" @click="openDialog">Create</button>
       </div>
     </div>
@@ -17,7 +18,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in paginatedUsers" :key="user.id">
+        <!-- <tr v-for="user in paginatedUsers" :key="user.id">
+          <td>
+            <input type="checkbox" v-model="selectedUsers" :value="user.id">
+          </td>
           <td>{{ user._id }}</td>
           <td>{{ user.name }}</td>
           <td>
@@ -27,6 +31,20 @@
             </span>
           </td>
           <td>{{ user.email }}</td>
+        </tr> -->
+        <tr v-for="(user, index) in paginatedUsers">
+          <td>
+            <input type="checkbox" v-model="selectedUsers" :value="paginatedUsers[index]._id">
+          </td>
+          <td>{{ paginatedUsers[index]._id }}</td>
+          <td>{{ paginatedUsers[index].name }}</td>
+          <td>
+            <span v-for="(expertise, index) in user.expertise" :key="index">
+              {{ expertise }}
+              <span v-if="index < user.expertise.length - 1">, </span>
+            </span>
+          </td>
+          <td>{{ paginatedUsers[index].email }}</td>
         </tr>
       </tbody>
     </table>
@@ -73,6 +91,7 @@ export default {
     return {
       dialog: false,
       users: [],
+      selectedUsers: [],
       name: '',
       email: '',
       password: '',
@@ -128,10 +147,15 @@ export default {
       }
     },
     async approveTutors() {
-      try {
-        const token = User.getToken();
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      const token = User.getToken()
+
+      for (const user of this.selectedUsers) {
+        try {
+          const response = await approveTutor(token, user.approve, user);
+          console.log(response.data);
+        } catch (error) {
+          console.error(error);
+        }
       }
     },
     openDialog() {
@@ -184,7 +208,8 @@ export default {
   font-size: 14px;
 }
 
-.menu__container .create-button {
+.menu__container .create-button,
+.menu__container .approve-button {
   background-color: aqua;
   color: black;
   border: none;
@@ -192,10 +217,12 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+  margin-left: 10px;
   transition: background-color 0.3s;
 }
 
-.menu__container .create-button:hover {
+.menu__container .create-button:hover,
+.menu__container .approve-button:hover {
   background-color: #005691;
 }
 
