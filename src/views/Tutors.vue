@@ -11,6 +11,7 @@
     <table v-if="users.length" class="table__tutors">
       <thead>
         <tr>
+          <th class="selectAll"><input type="checkbox" v-model="allSelected" @change="toggleSelectAll"></th>
           <th class="table__header">ID</th>
           <th class="table__header">Name</th>
           <th class="table__header">Expertise</th>
@@ -18,23 +19,9 @@
         </tr>
       </thead>
       <tbody>
-        <!-- <tr v-for="user in paginatedUsers" :key="user.id">
-          <td>
-            <input type="checkbox" v-model="selectedUsers" :value="user.id">
-          </td>
-          <td>{{ user._id }}</td>
-          <td>{{ user.name }}</td>
-          <td>
-            <span v-for="(expertise, index) in user.expertise" :key="index">
-              {{ expertise }}
-              <span v-if="index < user.expertise.length - 1">, </span>
-            </span>
-          </td>
-          <td>{{ user.email }}</td>
-        </tr> -->
         <tr v-for="(user, index) in paginatedUsers">
           <td>
-            <input type="checkbox" v-model="selectedUsers" :value="paginatedUsers[index]._id">
+            <input type="checkbox" v-model="selectedUsers" :value="paginatedUsers[index]._id" :checked="allSelected">
           </td>
           <td>{{ paginatedUsers[index]._id }}</td>
           <td>{{ paginatedUsers[index].name }}</td>
@@ -84,6 +71,7 @@ import { User } from "../store/user";
 import { getTutor } from '../API/tutors';
 import { createTutor } from '../API/tutors';
 import { approveTutor } from '../API/tutors';
+import { all } from "axios";
 
 export default {
   // TODO: Fetch data from the backend
@@ -92,6 +80,7 @@ export default {
       dialog: false,
       users: [],
       selectedUsers: [],
+      allSelected: false,
       name: '',
       email: '',
       password: '',
@@ -131,8 +120,8 @@ export default {
       }
     },
     toggleSelectAll() {
-      if (this.selectAll) {
-        this.selectedUsers = this.paginatedUsers.map(user => user.id);
+      if (this.allSelected) {
+        this.selectedUsers = this.paginatedUsers.map(user => user._id);
       } else {
         this.selectedUsers = [];
       }
@@ -177,12 +166,13 @@ export default {
 
     filteredUsers() {
       const keyword = this.searchKeyword.toLowerCase();
-      return this.users.filter(user =>
-        user.name.toLowerCase().includes(keyword) ||
-        user.email.toLowerCase().includes(keyword) ||
-        user.expertise.some(exp => exp.toLowerCase().includes(keyword))
+
+      const filtered = this.users.filter(user =>
+        user.name.toLowerCase().includes(keyword)
       );
-    },
+
+      return filtered;
+    }
   }
 }
 </script>
@@ -250,8 +240,29 @@ export default {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: left;
-  width: 213px;
   box-sizing: border-box;
+}
+
+.selectAll {
+  min-width: 30px;
+  max-width: 30px;
+}
+
+.table__header {
+  min-width: 217px;
+  max-width: 217px;
+}
+
+.table__header:nth-child(3) {
+  /* Expertise column */
+  min-width: 258px;
+  max-width: 258px;
+}
+
+.table__header:nth-child(4) {
+  /* Email column */
+  min-width: 272px;
+  max-width: 272px;
 }
 
 .pagination-container {
