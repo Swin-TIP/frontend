@@ -45,7 +45,7 @@ export const approveTutor = async (token, approve, user_id) => {
     "_id": user_id
   }
   const approval = {
-    "approve": !approve
+    "approve": true
   }
   try {
     return await axios.patch(`${API_URL}/user/approval/${user_id}`, approval, { headers })
