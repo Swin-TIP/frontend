@@ -88,12 +88,12 @@ const sessionTimings = computed(() => {
   return timings;
 });
 
-const handleClick = (action, id) => {
+const handleClick = (action, session) => {
   console.log(action);
   switch (action) {
     case "Q&A Board":
-      localStorage.setItem('selectedSession', JSON.stringify(id));
-      router.push("/qa");
+      localStorage.setItem('selectedSession', JSON.stringify(session));
+      router.push(`/qa?session_id=${session._id}`);
       break;
   }
 };
