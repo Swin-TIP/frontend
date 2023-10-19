@@ -1,8 +1,9 @@
 import axios from "axios";
+import { User } from '../store/user';
 
 const API_URL = "https://swinburne-398109.ts.r.appspot.com/api";
 
-const userToken = localStorage.getItem('token');
+const userToken = User.getToken();
 
 export const getSessionsFromDates = async (startDate, endDate) => {
     try {
@@ -38,7 +39,7 @@ export const getRegisteredSessions = async () => {
     };
 };
 
-export const registerAsStudent = async (sessionId) => {
+export const registerForSession = async (sessionId) => {
     try {
         const body = {
             enroll: true
@@ -58,7 +59,7 @@ export const registerAsStudent = async (sessionId) => {
     };
 };
 
-export const withdrawAsStudent = async (sessionId) => {
+export const withdrawFromSession = async (sessionId) => {
     try {
         const body = {
             enroll: false
@@ -77,5 +78,3 @@ export const withdrawAsStudent = async (sessionId) => {
         return new Error(error);
     };
 };
-
-export const enrollAsTutor = async (sessionId) => { };

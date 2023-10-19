@@ -3,7 +3,7 @@ import { computed, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { User } from '../store/user';
-import { registerAsStudent, withdrawAsStudent } from '../API/sessions';
+import { registerForSession, withdrawFromSession } from '../API/sessions';
 
 const emit = defineEmits(['onWithdraw']);
 const router = useRouter();
@@ -90,19 +90,22 @@ const sessionTimings = computed(() => {
     return timings;
 });
 
-const handleClick = async (action, id) => {
+const handleClick = async (action, payload) => {
     console.log(action);
     switch (action) {
         case "Q&A Board":
-            localStorage.setItem('selectedSession', JSON.stringify(id));
+            localStorage.setItem('selectedSession', JSON.stringify(payload));
             router.push("/qa");
             break;
         case "register":
-            await registerAsStudent(id);
+            await registerForSession(payload);
             break;
         case "withdraw":
-            await withdrawAsStudent(id);
-            emit("onWithdraw", id);
+            await withdrawFromSession(payload);
+            emit("onWithdraw", payload);
+            break;
+        case "enroll":
+            await registerForSession(payload);
             break;
     }
 };

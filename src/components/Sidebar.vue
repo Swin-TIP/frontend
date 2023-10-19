@@ -8,8 +8,7 @@ const router = useRouter();
 const userRole = User.getRole();
 
 const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
+    User.logout();
     router.push('/login');
 };
 </script>
