@@ -28,8 +28,8 @@
       <div class="buttons" v-if="role === 'STUDENT'">
         <button id="answredBy" v-if="questionArr[index].is_answered === true">Answered by: {{
           questionArr[index].answered_by.name }}</button>
-        <button class="vote">&uarr;</button>
-        <button class="downgrade">&darr;</button>
+        <div class="voteDetail">{{ questionArr[index].votes.length }} Votes</div>
+        <button class="vote" @click="voteForQuestion(index)">&uarr;</button>
       </div>
     </div>
 
@@ -46,6 +46,7 @@
 import { postRequest } from "../API/QA";
 import { getRequest } from "../API/QA";
 import { patchStatus } from "../API/QA";
+import { patchVote } from "../API/QA";
 import { User } from "../store/user";
 
 export default {
@@ -126,6 +127,19 @@ export default {
         })
         .catch(error => {
           console.error('Error marking as answered:', error);
+        })
+    },
+    voteForQuestion(index) {
+      const token = User.getToken()
+      let qID = this.questionArr[index]._id
+
+      patchVote(token, qID)
+        .then(() => {
+          // When marked successfully, refresh the question list
+          return this.getQuestion();
+        })
+        .catch(error => {
+          console.error('Error voting:', error);
         })
     }
   }
