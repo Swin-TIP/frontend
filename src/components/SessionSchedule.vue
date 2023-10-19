@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import { User } from '../store/user';
 import { registerForSession, withdrawFromSession } from '../API/sessions';
 
-const emit = defineEmits(['onWithdraw']);
+const emit = defineEmits(['onRegister', 'onWithdraw']);
 const router = useRouter();
 
 const props = defineProps({
@@ -99,6 +99,7 @@ const handleClick = async (action, payload) => {
             break;
         case "register":
             await registerForSession(payload);
+            emit("onRegister");
             break;
         case "withdraw":
             await withdrawFromSession(payload);
@@ -106,6 +107,7 @@ const handleClick = async (action, payload) => {
             break;
         case "enroll":
             await registerForSession(payload);
+            emit("onRegister");
             break;
     }
 };
