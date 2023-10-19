@@ -5,6 +5,7 @@
       <input class="search-bar" type="text" placeholder="Search by name" v-model="searchKeyword">
       <div class="operate">
         <button class="approve-button" @click="approveTutors">Approve</button>
+        <button class="dis-button" @click="disTutors">Disapprove</button>
         <button class="create-button" @click="openDialog">Create</button>
       </div>
     </div>
@@ -13,7 +14,8 @@
         <tr>
           <th class="selectAll"><input type="checkbox" v-model="allSelected" @change="toggleSelectAll"></th>
           <th class="table__header">ID</th>
-          <th class="table__header">Name</th>
+          <th class="name">Name</th>
+          <th class="approve">Approve</th>
           <th class="table__header">Expertise</th>
           <th class="table__header">Email</th>
         </tr>
@@ -25,6 +27,9 @@
           </td>
           <td>{{ paginatedUsers[index]._id }}</td>
           <td>{{ paginatedUsers[index].name }}</td>
+          <td><button
+              :class="{ 'appStatus': true, 'aqua': paginatedUsers[index].approved, 'red': !paginatedUsers[index].approved }">{{
+                paginatedUsers[index].approved ? 'Approved' : 'On boarding' }}</button></td>
           <td>
             <span v-for="(expertise, index) in user.expertise" :key="index">
               {{ expertise }}
@@ -35,8 +40,8 @@
         </tr>
       </tbody>
     </table>
-    <div class="pagination-container">
-      <button v-for="page in Math.ceil(users.length / itemsPerPage)" :key="page" @click="changePage(page)"
+    <div class="pagination-container" v-if="filteredUsers.length > itemsPerPage">
+      <button v-for="page in Math.ceil(filteredUsers.length / itemsPerPage)" :key="page" @click="changePage(page)"
         :class="{ active: page === currentPage }">
         {{ page }}
       </button>
@@ -71,6 +76,7 @@ import { User } from "../store/user";
 import { getTutor } from '../API/tutors';
 import { createTutor } from '../API/tutors';
 import { approveTutor } from '../API/tutors';
+import { disapproveTutor } from '../API/tutors';
 import { all } from "axios";
 
 export default {
@@ -131,6 +137,7 @@ export default {
         const token = User.getToken();
         const data = await getTutor(token);
         this.users = data;
+        console.log(this.paginatedUsers);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -146,6 +153,22 @@ export default {
           console.error(error);
         }
       }
+
+      await this.getTutorList()
+    },
+    async disTutors() {
+      const token = User.getToken()
+
+      for (const user of this.selectedUsers) {
+        try {
+          const response = await disapproveTutor(token, user.approve, user);
+          console.log(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      await this.getTutorList()
     },
     openDialog() {
       this.dialog = true;
@@ -167,9 +190,13 @@ export default {
     filteredUsers() {
       const keyword = this.searchKeyword.toLowerCase();
 
+      this.currentPage = 1
+
       const filtered = this.users.filter(user =>
         user.name.toLowerCase().includes(keyword)
       );
+
+      console.log(filtered);
 
       return filtered;
     }
@@ -211,8 +238,21 @@ export default {
   transition: background-color 0.3s;
 }
 
+.dis-button {
+  background-color: red;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+  transition: background-color 0.3s;
+}
+
 .menu__container .create-button:hover,
-.menu__container .approve-button:hover {
+.menu__container .approve-button:hover,
+.menu__container .dis-button:hover {
   background-color: #005691;
 }
 
@@ -248,9 +288,19 @@ export default {
   max-width: 30px;
 }
 
+.approve {
+  min-width: 106px;
+  max-width: 106px;
+}
+
+.name {
+  min-width: 150px;
+  max-width: 150px;
+}
+
 .table__header {
-  min-width: 217px;
-  max-width: 217px;
+  min-width: 225px;
+  max-width: 225px;
 }
 
 .table__header:nth-child(3) {
@@ -263,6 +313,18 @@ export default {
   /* Email column */
   min-width: 272px;
   max-width: 272px;
+}
+
+.appStatus {
+  max-height: 20px;
+}
+
+.appStatus.aqua {
+  background-color: aqua;
+}
+
+.appStatus.red {
+  background-color: red;
 }
 
 .pagination-container {
@@ -286,7 +348,7 @@ export default {
 }
 
 .pagination-container button.active {
-  background-color: var(--PRIMARY-COLOR);
+  background-color: aqua;
 }
 
 .dialog-container {
