@@ -3,6 +3,7 @@ import { computed, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { User } from '../store/user';
+import moment from 'moment';
 
 const router = useRouter();
 
@@ -72,16 +73,11 @@ let monthString = computed(() => {
 const sessionTimings = computed(() => {
   const timings = [];
   props.sessionsList.forEach(session => {
-    const sessionStartDateObj = new Date(session.start_at);
-    const sessionEndDateObj = new Date(session.end_at);
-    const sessionStartTime =
-      `${sessionStartDateObj.getHours() < 10
-        ? '0' + sessionStartDateObj.getHours() : sessionStartDateObj.getHours()}:${sessionStartDateObj.getMinutes() < 10
-          ? '0' + sessionStartDateObj.getMinutes() : sessionStartDateObj.getMinutes()}`;
-    const sessionEndTime =
-      `${sessionEndDateObj.getHours() < 10
-        ? '0' + sessionEndDateObj.getHours() : sessionEndDateObj.getHours()}:${sessionEndDateObj.getMinutes() < 10
-          ? '0' + sessionEndDateObj.getMinutes() : sessionEndDateObj.getMinutes()}`;
+    const sessionStartDateObj = moment(session.start_at);
+    const sessionEndDateObj = moment(session.end_at);
+    let format = "HH:mm"
+    const sessionStartTime = sessionStartDateObj.format(format)
+    const sessionEndTime = sessionEndDateObj.format(format)
     const sessionTiming = `${sessionStartTime} - ${sessionEndTime}`;
     timings.push(sessionTiming);
   });
@@ -107,7 +103,7 @@ const handleClick = (action, session) => {
       <div class="session__details">
         <p class="session__details-big">{{ sessionTimings[index] }}</p>
         <p class="session__details-small">Students: {{ session.students.length }}/{{ session.room.capacity }}</p>
-        <p class="session__details-small">Room {{ session.room.name.split("m")[1] }}</p>
+        <p class="session__details-small"> {{ session.room.name }}</p>
       </div>
       <div v-if="session.tutors.length !== 0" class="session__tutors">
         <div class="session__tutors-each" v-for="tutor in session.tutors">
