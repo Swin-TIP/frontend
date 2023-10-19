@@ -37,3 +37,45 @@ export const getRegisteredSessions = async () => {
         return new Error(error);
     };
 };
+
+export const registerAsStudent = async (sessionId) => {
+    try {
+        const body = {
+            enroll: true
+        };
+        const response = await axios.patch(`${API_URL}/session/enrollment/${sessionId}`,
+            body,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
+export const withdrawAsStudent = async (sessionId) => {
+    try {
+        const body = {
+            enroll: false
+        };
+        const response = await axios.patch(`${API_URL}/session/enrollment/${sessionId}`,
+            body,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
+export const enrollAsTutor = async (sessionId) => { };
