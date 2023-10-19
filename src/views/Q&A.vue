@@ -161,9 +161,9 @@ export default {
   top: 100px;
 } */
 
-/* #subject {
-  font-size: 35px;
-} */
+#subject {
+  display: inline-block;
+}
 
 #date {
   /* margin-top: 40px; */
