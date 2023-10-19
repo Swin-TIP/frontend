@@ -4,9 +4,8 @@
   </div>
 
   <div id="title">
-    <h1 id="subject" v-for="(subject, index) in subjects" :key="index">
-      {{ subjects[index] }}
-    </h1>
+    <h1>{{ subjects }}</h1>
+
     <div id="date">
       {{ startAt }} ~ {{ endAt }}
     </div>
@@ -44,10 +43,11 @@
 
 <script>
 import { postRequest } from "../API/QA";
-import { getRequest } from "../API/QA";
+import { getRequest, getSessionDetail } from "../API/QA";
 import { patchStatus } from "../API/QA";
 import { patchVote } from "../API/QA";
 import { User } from "../store/user";
+import moment from 'moment';
 
 export default {
   data() {
@@ -55,7 +55,7 @@ export default {
       sessionId: '',
       startAt: '',
       endAt: '',
-      subjects: [],
+      subjects: "",
       qInput: '',
       newQuestion: '',
       questionArr: [],
@@ -64,14 +64,6 @@ export default {
   },
 
   mounted() {
-    // Get the session info from local storage
-    const selectedSession = JSON.parse(localStorage.getItem('selectedSession'));
-
-    this.sessionId = selectedSession._id;
-    this.startAt = selectedSession.start_at;
-    this.endAt = selectedSession.end_at;
-    this.subjects = selectedSession.subjects;
-
     //Get question list from API
     this.getQuestion()
   },
@@ -100,11 +92,29 @@ export default {
     },
 
     getQuestion() {
+      let sessionID = this.$route.query.session_id;
+
       const token = User.getToken()
 
-      let sID = this.sessionId
+      if (this.startAt == "") {
+        getSessionDetail(token, sessionID)
+          .then(data => {
+            console.log(data)
 
-      getRequest(token, sID)
+            let df = "DD/MM/yyyy HH:mm"
+            let startDate = moment.unix(data.start_at / 1000).format(df);
+            let endDate = moment.unix(data.end_at / 1000).format(df);
+
+            this.startAt = startDate;
+            this.endAt = endDate;
+            this.subjects = data.subjects.join(", ");
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          })
+      }
+
+      getRequest(token, sessionID)
         .then(data => {
           this.questionArr = data;
         })
