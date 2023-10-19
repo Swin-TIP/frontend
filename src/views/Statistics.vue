@@ -127,7 +127,7 @@ export default {
             this.studentRoomRatio = {
                 labels: [...statistics.map(s => s.session.start_date)],
                 datasets: [{
-                    label: 'Student / Room Capacity Ratio',
+                    label: 'Students / Room Capacity',
                     backgroundColor: '#0000FF',
                     data: [...statistics.map(s => s.student_room_ratio)]
                 }]
@@ -136,7 +136,7 @@ export default {
             this.studentTutorRatio = {
                 labels: [...statistics.map(s => s.session.start_date)],
                 datasets: [{
-                    label: 'Student / Tutor Ratio',
+                    label: 'Students / Tutors',
                     backgroundColor: '#00FF00',
                     data: [...statistics.map(s => s.student_tutor_ratio)]
                 }]
@@ -145,7 +145,7 @@ export default {
             this.askedAnsweredRatio = {
                 labels: [...statistics.map(s => s.session.start_date)],
                 datasets: [{
-                    label: 'Answered Question / Asked Question Ratio',
+                    label: 'Answered Questions / Asked Questions',
                     backgroundColor: '#FF0000',
                     data: [...statistics.map(s => s.asked_answer_ratio)]
                 }]
