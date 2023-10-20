@@ -9,6 +9,8 @@
         <button class="create-button" @click="openDialog">Create</button>
       </div>
     </div>
+    <paginate :page-count="Math.ceil(filteredUsers.length / itemsPerPage)" :click-handler="changePage" :prev-text="'Prev'"
+      :next-text="'Next'" />
     <table v-if="users.length" class="table__tutors">
       <thead>
         <tr>
@@ -40,12 +42,7 @@
         </tr>
       </tbody>
     </table>
-    <div class="pagination-container" v-if="filteredUsers.length > itemsPerPage">
-      <button v-for="page in Math.ceil(filteredUsers.length / itemsPerPage)" :key="page" @click="changePage(page)"
-        :class="{ active: page === currentPage }">
-        {{ page }}
-      </button>
-    </div>
+
   </div>
 
   <div class="dialog-container" v-if="dialog">
@@ -78,8 +75,13 @@ import { createTutor } from '../API/tutors';
 import { approveTutor } from '../API/tutors';
 import { disapproveTutor } from '../API/tutors';
 import { all } from "axios";
+import Paginate from "vuejs-paginate-next";
 
 export default {
+  // TODO: Fetch data from the backend
+  components: {
+    paginate: Paginate,
+  },
   // TODO: Fetch data from the backend
   data() {
     return {
@@ -429,4 +431,14 @@ export default {
 .dialog-actions .close-button:hover {
   background-color: #005691;
 }
+</style>
+
+<style lang="css">
+/* Adopt bootstrap pagination stylesheet. */
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css";
+
+/* Write your own CSS for pagination */
+.pagination {}
+
+.page-item {}
 </style>
