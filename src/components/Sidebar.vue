@@ -21,7 +21,7 @@ const handleLogout = () => {
                 <h1 class="sidenav__title">Bright Boost</h1>
             </div>
             <nav>
-                <router-link v-if="!userRole === 'ADMIN'" class="sidenav__link"
+                <router-link v-if="userRole !== 'ADMIN'" class="sidenav__link"
                     :class="{ active: currentRoute === '/schedule' }" to="/schedule">Session
                     Schedule</router-link>
                 <router-link v-if="userRole === 'ADMIN'" class="sidenav__link"
