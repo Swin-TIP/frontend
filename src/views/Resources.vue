@@ -11,36 +11,85 @@
                 <tr>
                     <th class="table__header">Room</th>
                     <th class="table__header">Capacity</th>
+                    <th class="table__header">Created At</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(room, index) in roomList">
 
                     <td>{{ room.name }}</td>
-                    <td>{{ room.capaicty }}</td>
+                    <td>{{ room.capacity }}</td>
+                    <td>{{ room.created_at }}</td>
                 </tr>
             </tbody>
         </table>
+    </div>
+
+
+    <div class="dialog-container" v-if="dialog">
+        <div class="dialog" style="max-width: 500px;">
+            <div class="dialog-header">
+                <span class="headline">Input Tutor Info</span>
+            </div>
+            <div class="dialog-content">
+                <!-- User Info Form -->
+                <form>
+                    <input class="input-field" placeholder="Name" v-model="room_name">
+                    <input class="input-field" placeholder="Capacity" v-model="room_capacity">
+                </form>
+            </div>
+            <div class="dialog-actions">
+                <button @click="createRoom" class="create-button">Create</button>
+                <button @click="closeDialog" class="close-button">Close</button>
+            </div>
+        </div>
     </div>
 </template>
   
   <!-- Javascript -->
 <script>
 
+import { getAllRooms, createNewRoom } from '../API/room';
+import moment from 'moment';
+
 export default {
     // TODO: Fetch data from the backend
     data() {
         return {
-            roomList: [{
-                name: "RM123",
-                capaicty: 100
-            }],
+            roomList: [],
+            dialog: false,
+            room_name: null,
+            room_capacity: null,
         }
     },
     mounted() {
+        this.refreshRoomList();
     },
     methods: {
-
+        refreshRoomList() {
+            getAllRooms()
+                .then(data => {
+                    this.roomList = data.map(d => {
+                        return {
+                            ...d,
+                            created_at: moment(d.created_at).format('YYYY-MM-DD HH:mm'),
+                        }
+                    });
+                });
+        },
+        createRoom() {
+            this.closeDialog();
+            createNewRoom(this.room_name, this.room_capacity)
+                .then(() => {
+                    this.refreshRoomList();
+                });
+        },
+        openDialog() {
+            this.dialog = true;
+        },
+        closeDialog() {
+            this.dialog = false;
+        },
     },
 }
 </script>
