@@ -98,3 +98,9 @@ watch(dateSelected, () => updateDayRegisteredSessions());
             :registeredView="true" @on-withdraw="handleWithdraw" />
     </section>
 </template>
+
+<style scoped>
+.schedule__content {
+    margin-top: 20px;
+}
+</style>

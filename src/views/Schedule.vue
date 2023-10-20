@@ -84,6 +84,5 @@ watch(dateSelected, () => fetchSessions());
 <style scoped>
 .schedule__content {
     margin-top: 20px;
-    padding: 10px;
 }
 </style>

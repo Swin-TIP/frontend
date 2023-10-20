@@ -160,7 +160,7 @@ const handleClick = async (action, session) => {
 <style scoped>
 .container {
     background-color: #F0F0F0;
-    height: 600px;
+    height: 500px;
     overflow: auto;
 }
 
