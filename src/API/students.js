@@ -7,7 +7,7 @@ const userToken = localStorage.getItem('token')
 // Get all students
 export const getStudents = async () => {
     try {
-        const response = await axios.get(`${API_URL}/user/list`, {
+        const response = await axios.get(`${API_URL}/user/search/`, {
             headers: {
                 Authorization: `Bearer ${userToken}`
             }

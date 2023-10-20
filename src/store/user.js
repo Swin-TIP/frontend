@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive } from 'vue'
 
 export const User = reactive({
     create(role, token) {
@@ -40,7 +40,7 @@ export const User = reactive({
         return JSON.parse(localStorage.registeredClasses);
     },
     addRegisteredClass(classToRegister) {
-        const registeredClasses = JSON.parse(localStorage.registeredClasses);
+        let registeredClasses = JSON.parse(localStorage.registeredClasses);
         registeredClasses = [...registeredClasses, classToRegister];
         localStorage.registeredClasses = JSON.stringify(registeredClasses);
     }

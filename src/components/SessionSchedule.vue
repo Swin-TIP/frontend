@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 
 import { User } from '../store/user';
 import { registerForSession, withdrawFromSession } from '../API/sessions';
+import moment from 'moment';
 
 const emit = defineEmits(['onRegister', 'onWithdraw']);
 const router = useRouter();
@@ -74,16 +75,11 @@ let monthString = computed(() => {
 const sessionTimings = computed(() => {
     const timings = [];
     props.sessionsList.forEach(session => {
-        const sessionStartDateObj = new Date(session.start_at);
-        const sessionEndDateObj = new Date(session.end_at);
-        const sessionStartTime =
-            `${sessionStartDateObj.getHours() < 10
-                ? '0' + sessionStartDateObj.getHours() : sessionStartDateObj.getHours()}:${sessionStartDateObj.getMinutes() < 10
-                    ? '0' + sessionStartDateObj.getMinutes() : sessionStartDateObj.getMinutes()}`;
-        const sessionEndTime =
-            `${sessionEndDateObj.getHours() < 10
-                ? '0' + sessionEndDateObj.getHours() : sessionEndDateObj.getHours()}:${sessionEndDateObj.getMinutes() < 10
-                    ? '0' + sessionEndDateObj.getMinutes() : sessionEndDateObj.getMinutes()}`;
+        const sessionStartDateObj = moment(session.start_at);
+        const sessionEndDateObj = moment(session.end_at);
+        let format = "HH:mm"
+        const sessionStartTime = sessionStartDateObj.format(format)
+        const sessionEndTime = sessionEndDateObj.format(format)
         const sessionTiming = `${sessionStartTime} - ${sessionEndTime}`;
         timings.push(sessionTiming);
     });
@@ -95,7 +91,7 @@ const handleClick = async (action, payload) => {
     switch (action) {
         case "Q&A Board":
             localStorage.setItem('selectedSession', JSON.stringify(payload));
-            router.push("/qa");
+            router.push(`/qa?session_id=${payload._id}`);
             break;
         case "register":
             await registerForSession(payload);
