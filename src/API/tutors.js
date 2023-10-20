@@ -10,7 +10,7 @@ export const getTutor = async (token) => {
 
   const params = {
     'page': 0,
-    'limit': 100,
+    'limit': 1000,
     'role': 'TUTOR'
   }
 
@@ -46,6 +46,22 @@ export const approveTutor = async (token, approve, user_id) => {
   }
   const approval = {
     "approve": true
+  }
+  try {
+    return await axios.patch(`${API_URL}/user/approval/${user_id}`, approval, { headers })
+  } catch (error) {
+    console.log(error);
+    return new Error(error);
+  }
+}
+export const disapproveTutor = async (token, approve, user_id) => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    "_id": user_id
+  }
+  const approval = {
+    "approve": false
   }
   try {
     return await axios.patch(`${API_URL}/user/approval/${user_id}`, approval, { headers })
