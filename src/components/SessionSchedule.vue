@@ -114,7 +114,7 @@ const handleClick = async (action, session) => {
 </script>
 
 <template>
-    <div class="container">
+    <div class="session__container">
         <h2 class="session__date">{{ props.day }}, {{ dateString }} {{ monthString }}</h2>
         <article v-if="sessionsList.length !== 0" v-for="(session, index) in sessionsList" class="session__item"
             :class="{ session__last: index === sessionsList.length - 1 }">
@@ -158,7 +158,7 @@ const handleClick = async (action, session) => {
 </template>
 
 <style scoped>
-.container {
+.session__container {
     background-color: #F0F0F0;
     height: 500px;
     overflow: auto;
