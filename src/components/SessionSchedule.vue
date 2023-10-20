@@ -22,7 +22,7 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    registeredSessionsList: {
+    registeredSessionsIds: {
         type: Array,
         default: []
     },
@@ -75,11 +75,6 @@ let monthString = computed(() => {
     };
     return result;
 });
-const listOfRegisteredSessionIds = computed(() => {
-    const ids = [];
-    props.registeredSessionsList.forEach(session => ids.push(session._id));
-    return ids;
-});
 
 const sessionTimings = computed(() => {
     const timings = [];
@@ -104,7 +99,7 @@ const handleClick = async (action, session) => {
             break;
         case "register":
             await registerForSession(session._id);
-            emit("onRegister", session);
+            emit("onRegister", session._id);
             break;
         case "withdraw":
             await withdrawFromSession(session._id);
@@ -112,7 +107,7 @@ const handleClick = async (action, session) => {
             break;
         case "enroll":
             await registerForSession(session._id);
-            emit("onRegister", session);
+            emit("onRegister", session._id);
             break;
     }
 };
@@ -144,14 +139,14 @@ const handleClick = async (action, session) => {
             </div>
             <div v-if="!props.registeredView" class="session__actions">
                 <!-- Not enrolled/registered -->
-                <button v-if="User.getRole() === 'TUTOR' && !listOfRegisteredSessionIds.includes(session._id)"
+                <button v-if="User.getRole() === 'TUTOR' && !props.registeredSessionsIds.includes(session._id)"
                     @click="handleClick('enroll', session)">Enroll</button>
-                <button v-if="User.getRole() === 'STUDENT' && !listOfRegisteredSessionIds.includes(session._id)"
+                <button v-if="User.getRole() === 'STUDENT' && !props.registeredSessionsIds.includes(session._id)"
                     @click="handleClick('register', session)">Register</button>
                 <!-- Enrolled/Registered -->
-                <button v-if="User.getRole() === 'TUTOR' && listOfRegisteredSessionIds.includes(session._id)"
+                <button v-if="User.getRole() === 'TUTOR' && props.registeredSessionsIds.includes(session._id)"
                     class="session__actions-disabled" @click="handleClick('enroll', session)">Enrolled</button>
-                <button v-if="User.getRole() === 'STUDENT' && listOfRegisteredSessionIds.includes(session._id)"
+                <button v-if="User.getRole() === 'STUDENT' && props.registeredSessionsIds.includes(session._id)"
                     class="session__actions-disabled" @click="handleClick('register', session)">Registered</button>
             </div>
             <div v-if="props.registeredView" class="session__actions">
@@ -216,6 +211,7 @@ const handleClick = async (action, session) => {
     background-color: rgb(var(--DISABLED));
     border: 1px solid rgb(var(--DISABLED-STROKE));
     cursor: not-allowed;
+    pointer-events: none;
 }
 
 .session__actions-cancel {

@@ -21,7 +21,8 @@ const handleLogin = async () => {
         } else {
             User.create(data.role, data.accessToken);
             const registeredSessions = await getRegisteredSessions();
-            User.setRegisteredSessions(registeredSessions);
+            const registeredSessionsIds = registeredSessions.map(session => session._id);
+            User.setRegisteredSessions(registeredSessionsIds);
             router.push("/");
         }
     }

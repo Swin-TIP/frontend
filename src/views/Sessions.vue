@@ -6,6 +6,7 @@ import SessionSchedule from '../components/SessionSchedule.vue';
 import WeekSelector from '../components/WeekSelector.vue';
 
 import { getRegisteredSessions } from '../API/sessions';
+import { User } from '../store/user';
 
 const daySelected = ref();
 const dateSelected = ref(new Date());
@@ -75,8 +76,9 @@ const updateDayRegisteredSessions = () => {
     dayRegisteredSessions.value = result;
 };
 
-const handleWithdraw = (sessionId) => {
-    registeredSessions = registeredSessions.filter(session => session._id !== sessionId);
+const handleWithdraw = async (sessionId) => {
+    User.removeRegisteredSession(sessionId);
+    await fetchRegisteredSessions();
     updateDayRegisteredSessions();
 };
 

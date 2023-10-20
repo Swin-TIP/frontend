@@ -55,11 +55,11 @@ const updateDateSelected = (daySelected, weekStart) => {
     return newDateSelected;
 };
 
-const fetchSessions = async (session = null) => {
+const fetchSessions = async (sessionId = null) => {
     const dateString = dateSelected.value.toISOString().split("T")[0];
     sessionsList.value = await getSessionsFromDates(dateString, dateString);
-    if (session) {
-        User.addRegisteredSession(session);
+    if (sessionId) {
+        User.addRegisteredSession(sessionId);
         registeredSessionsList.value = User.getRegisteredSessions();
     }
 };
@@ -77,8 +77,7 @@ watch(dateSelected, () => fetchSessions());
     <section class="schedule__content">
         <DaySelector @day-selected="handleDaySelected" />
         <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList"
-            :registered-sessions-list="registeredSessionsList" :registeredView="false"
-            @on-register="fetchSessions(session)" />
+            :registered-sessions-ids="registeredSessionsList" :registeredView="false" @on-register="fetchSessions" />
     </section>
 </template>
 

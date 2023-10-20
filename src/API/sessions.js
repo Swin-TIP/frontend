@@ -3,8 +3,6 @@ import { User } from '../store/user';
 
 const API_URL = "https://swinburne-398109.ts.r.appspot.com/api";
 
-const userToken = User.getToken();
-
 export const getSessionsFromDates = async (startDate, endDate) => {
     try {
         const response = await axios.get(`${API_URL}/session/list/${startDate}/${endDate}`);
@@ -26,6 +24,7 @@ export const getSessionDetails = async (sessionId) => {
 };
 
 export const getRegisteredSessions = async () => {
+    const userToken = User.getToken();
     try {
         const response = await axios.get(`${API_URL}/user/session/list`, {
             headers: {
@@ -40,6 +39,7 @@ export const getRegisteredSessions = async () => {
 };
 
 export const registerForSession = async (sessionId) => {
+    const userToken = User.getToken();
     try {
         const body = {
             enroll: true
@@ -60,6 +60,7 @@ export const registerForSession = async (sessionId) => {
 };
 
 export const withdrawFromSession = async (sessionId) => {
+    const userToken = User.getToken();
     try {
         const body = {
             enroll: false
