@@ -6,11 +6,13 @@ import SessionSchedule from '../components/SessionSchedule.vue';
 import WeekSelector from '../components/WeekSelector.vue';
 
 import { getSessionsFromDates } from '../API/sessions';
+import { User } from '../store/user';
 
 const daySelected = ref();
 const dateSelected = ref(new Date());
 const weekStartSelected = ref();
 const sessionsList = ref([]);
+const registeredSessionsList = ref(User.getRegisteredSessions());
 
 const handleDaySelected = day => {
     daySelected.value = day;
@@ -53,9 +55,13 @@ const updateDateSelected = (daySelected, weekStart) => {
     return newDateSelected;
 };
 
-const fetchSessions = async () => {
+const fetchSessions = async (session = null) => {
     const dateString = dateSelected.value.toISOString().split("T")[0];
     sessionsList.value = await getSessionsFromDates(dateString, dateString);
+    if (session) {
+        User.addRegisteredSession(session);
+        registeredSessionsList.value = User.getRegisteredSessions();
+    }
 };
 
 onMounted(() => {
@@ -70,8 +76,9 @@ watch(dateSelected, () => fetchSessions());
     <WeekSelector @week-selected="handleWeekSelected" />
     <section class="schedule__content">
         <DaySelector @day-selected="handleDaySelected" />
-        <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList" :registeredView="false"
-            @on-register="fetchSessions" />
+        <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList"
+            :registered-sessions-list="registeredSessionsList" :registeredView="false"
+            @on-register="fetchSessions(session)" />
     </section>
 </template>
 

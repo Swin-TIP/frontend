@@ -22,6 +22,10 @@ const props = defineProps({
         type: Array,
         default: []
     },
+    registeredSessionsList: {
+        type: Array,
+        default: []
+    },
     registeredView: {
         type: Boolean,
         default: false
@@ -71,6 +75,11 @@ let monthString = computed(() => {
     };
     return result;
 });
+const listOfRegisteredSessionIds = computed(() => {
+    const ids = [];
+    props.registeredSessionsList.forEach(session => ids.push(session._id));
+    return ids;
+});
 
 const sessionTimings = computed(() => {
     const timings = [];
@@ -86,24 +95,24 @@ const sessionTimings = computed(() => {
     return timings;
 });
 
-const handleClick = async (action, payload) => {
+const handleClick = async (action, session) => {
     console.log(action);
     switch (action) {
         case "Q&A Board":
-            localStorage.setItem('selectedSession', JSON.stringify(payload));
-            router.push(`/qa?session_id=${payload._id}`);
+            localStorage.setItem('selectedSession', JSON.stringify(session));
+            router.push(`/qa?session_id=${session}`);
             break;
         case "register":
-            await registerForSession(payload);
-            emit("onRegister");
+            await registerForSession(session._id);
+            emit("onRegister", session);
             break;
         case "withdraw":
-            await withdrawFromSession(payload);
-            emit("onWithdraw", payload);
+            await withdrawFromSession(session._id);
+            emit("onWithdraw", session._id);
             break;
         case "enroll":
-            await registerForSession(payload);
-            emit("onRegister");
+            await registerForSession(session._id);
+            emit("onRegister", session);
             break;
     }
 };
@@ -134,12 +143,20 @@ const handleClick = async (action, payload) => {
                 <p class="session__details-big">Tutor: None</p>
             </div>
             <div v-if="!props.registeredView" class="session__actions">
-                <button v-if="User.getRole() === 'TUTOR'" @click="handleClick('enroll', session._id)">Enroll</button>
-                <button v-if="User.getRole() === 'STUDENT'" @click="handleClick('register', session._id)">Register</button>
+                <!-- Not enrolled/registered -->
+                <button v-if="User.getRole() === 'TUTOR' && !listOfRegisteredSessionIds.includes(session._id)"
+                    @click="handleClick('enroll', session)">Enroll</button>
+                <button v-if="User.getRole() === 'STUDENT' && !listOfRegisteredSessionIds.includes(session._id)"
+                    @click="handleClick('register', session)">Register</button>
+                <!-- Enrolled/Registered -->
+                <button v-if="User.getRole() === 'TUTOR' && listOfRegisteredSessionIds.includes(session._id)"
+                    class="session__actions-disabled" @click="handleClick('enroll', session)">Enrolled</button>
+                <button v-if="User.getRole() === 'STUDENT' && listOfRegisteredSessionIds.includes(session._id)"
+                    class="session__actions-disabled" @click="handleClick('register', session)">Registered</button>
             </div>
             <div v-if="props.registeredView" class="session__actions">
                 <button @click="handleClick('Q&A Board', session)">Q&A Board</button>
-                <button class="session__actions-cancel" @click="handleClick('withdraw', session._id)">Withdraw</button>
+                <button class="session__actions-cancel" @click="handleClick('withdraw', session)">Withdraw</button>
             </div>
         </article>
     </div>
@@ -193,6 +210,12 @@ const handleClick = async (action, payload) => {
     display: flex;
     justify-content: space-around;
     width: 250px;
+}
+
+.session__actions-disabled {
+    background-color: rgb(var(--DISABLED));
+    border: 1px solid rgb(var(--DISABLED-STROKE));
+    cursor: not-allowed;
 }
 
 .session__actions-cancel {

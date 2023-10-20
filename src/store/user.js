@@ -5,7 +5,6 @@ export const User = reactive({
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
         localStorage.setItem("approved", true);
-        localStorage.setItem("registeredClasses", JSON.stringify([]));
     },
     getApprovedStaus() {
         return localStorage.approved;
@@ -30,18 +29,21 @@ export const User = reactive({
         localStorage.removeItem("token");
         localStorage.removeItem("role");
         localStorage.removeItem("approved");
-        localStorage.removeItem("registeredClasses");
+        localStorage.removeItem("registeredSessions");
         if (localStorage.getItem("selectedSession")) localStorage.removeItem("selectedSession");
     },
     getToken() {
         return localStorage.getItem("token");
     },
-    getRegisteredClasses() {
-        return JSON.parse(localStorage.registeredClasses);
+    getRegisteredSessions() {
+        return JSON.parse(localStorage.registeredSessions);
     },
-    addRegisteredClass(classToRegister) {
-        let registeredClasses = JSON.parse(localStorage.registeredClasses);
-        registeredClasses = [...registeredClasses, classToRegister];
-        localStorage.registeredClasses = JSON.stringify(registeredClasses);
+    setRegisteredSessions(registeredSessions) {
+        localStorage.setItem("registeredSessions", JSON.stringify(registeredSessions));
+    },
+    addRegisteredSession(sessionToRegister) {
+        let registeredSessions = JSON.parse(localStorage.registeredSessions);
+        registeredSessions = [...registeredSessions, sessionToRegister];
+        localStorage.registeredSessions = JSON.stringify(registeredSessions);
     }
 });

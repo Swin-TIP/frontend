@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 
 import { login } from '../API/auth';
+import { getRegisteredSessions } from '../API/sessions';
 import { User } from '../store/user';
 import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 
@@ -19,6 +20,8 @@ const handleLogin = async () => {
             console.log("Error occurred");
         } else {
             User.create(data.role, data.accessToken);
+            const registeredSessions = await getRegisteredSessions();
+            User.setRegisteredSessions(registeredSessions);
             router.push("/");
         }
     }
