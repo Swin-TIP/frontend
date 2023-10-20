@@ -2,49 +2,55 @@ import axios from 'axios'
 
 const API_URL = 'https://swinburne-398109.ts.r.appspot.com/api'
 
-const userToken = localStorage.getItem('token')
+export const getStudent = async (token) => {
+    const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+    }
 
-// Get all students
-export const getStudents = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/user/list`, {
-      headers: {
-        Authorization: `Bearer ${userToken}`
-      }
-    })
-    return response.data
-  } catch (error) {
-    return new Error(error)
-  }
+    const params = {
+        page: 0,
+        limit: 10000,
+        role: 'STUDENT'
+    }
+
+    try {
+        const response = await axios.get(`${API_URL}/user/list`, { headers, params })
+        return response.data
+    } catch (error) {
+        throw error
+    }
 }
 
-// Get student details by their name
-export const getStudentByName = async (name) => {
-  try {
-    const response = await axios.get(`${API_URL}/user/search/${name}`, {
-      headers: {
-        Authorization: `Bearer ${userToken}`
-      }
-    })
-    return response.data
-  } catch (error) {
-    return new Error(error)
-  }
+export const approveStudent = async (token, approve, user_id) => {
+    const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        _id: user_id
+    }
+    const approval = {
+        approve: true
+    }
+    try {
+        return await axios.patch(`${API_URL}/user/approval/${user_id}`, approval, { headers })
+    } catch (error) {
+        console.log(error)
+        return new Error(error)
+    }
 }
-
-export const updateStudentApproval = async (studentId, approve) => {
-  try {
-    const response = await axios.patch(
-      `${API_URL}/user/approval/${studentId}`,
-      { approve },
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      }
-    )
-    return response.data
-  } catch (error) {
-    return new Error(error)
-  }
+export const disapproveStudent = async (token, approve, user_id) => {
+    const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        _id: user_id
+    }
+    const approval = {
+        approve: false
+    }
+    try {
+        return await axios.patch(`${API_URL}/user/approval/${user_id}`, approval, { headers })
+    } catch (error) {
+        console.log(error)
+        return new Error(error)
+    }
 }
