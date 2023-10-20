@@ -58,7 +58,7 @@ const handleLogin = async () => {
 .container {
     display: flex;
     flex-direction: column;
-    width: 15em;
+    width: 300px;
     padding: 2em 2.5em;
     background-color: #FAFAFA;
 }
