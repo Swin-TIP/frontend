@@ -7,10 +7,10 @@ export const User = reactive({
         localStorage.setItem("approved", true);
     },
     getApprovedStatus() {
-        return localStorage.approved;
+        return localStorage.getItem("approved");
     },
     setApproved() {
-        localStorage.approved = true;
+        localStorage.setItem("approved", true);
     },
     getRole() {
         return localStorage.getItem("role");

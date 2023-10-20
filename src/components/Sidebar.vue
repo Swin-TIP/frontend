@@ -6,6 +6,7 @@ import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 const currentRoute = useRoute().fullPath;
 const router = useRouter();
 const userRole = User.getRole();
+const isUserApproved = User.getApprovedStatus();
 
 const handleLogout = () => {
     User.logout();
@@ -23,7 +24,7 @@ const handleLogout = () => {
             <nav>
                 <router-link class="sidenav__link" :class="{ active: currentRoute === '/schedule' }" to="/schedule">Session
                     Schedule</router-link>
-                <router-link v-if="User.getApprovedStatus() === true" class="sidenav__link"
+                <router-link v-if="isUserApproved === 'true'" class="sidenav__link"
                     :class="{ active: currentRoute === '/sessions' }" to="/sessions">Registered
                     Sessions</router-link>
                 <router-link v-if="userRole === 'ADMIN'" class="sidenav__link"
@@ -78,7 +79,6 @@ const handleLogout = () => {
     align-items: center;
     text-decoration: none;
     color: black;
-    height: 30px;
     padding: 10px 30px;
 }
 
