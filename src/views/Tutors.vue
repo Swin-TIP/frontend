@@ -93,6 +93,7 @@ export default {
       expertiseInput: '',
       expertise: [],
       currentPage: 1,
+      savedPage: 0,
       itemsPerPage: 10,
       searchKeyword: ''
     }
@@ -145,9 +146,12 @@ export default {
     async approveTutors() {
       const token = User.getToken()
 
+      this.savedPage = this.currentPage
+
       for (const user of this.selectedUsers) {
         try {
           const response = await approveTutor(token, user.approve, user);
+          // window.alert('Tutor approved successfully!');
           console.log(response.data);
         } catch (error) {
           console.error(error);
@@ -155,9 +159,16 @@ export default {
       }
 
       await this.getTutorList()
+
+      //After approve or disapprove, clear selection.
+      this.selectedUsers = []
+
+      this.currentPage = this.savedPage
     },
     async disTutors() {
       const token = User.getToken()
+
+      this.savedPage = this.currentPage
 
       for (const user of this.selectedUsers) {
         try {
@@ -169,6 +180,11 @@ export default {
       }
 
       await this.getTutorList()
+
+      //After approve or disapprove, clear selection.
+      this.selectedUsers = []
+
+      this.currentPage = this.savedPage
     },
     openDialog() {
       this.dialog = true;
@@ -328,9 +344,9 @@ export default {
 }
 
 .pagination-container {
-  position: fixed;
-  bottom: 30%;
-  left: 60%;
+  position: relative;
+  margin-top: 30px;
+  left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
