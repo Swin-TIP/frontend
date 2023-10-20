@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue'
 import Sessions from './views/Sessions.vue';
+import AdminSchedule from './views/AdminSchedule.vue';
 import MainLayout from './MainLayout.vue';
 import Login from './views/Login.vue';
 import Schedule from './views/Schedule.vue';
@@ -27,11 +28,12 @@ const routes = [
         children: [
             { path: '/sessions', component: Sessions },
             { path: '/schedule', component: Schedule },
+            { path: '/schedule-admin', component: AdminSchedule },
             { path: '/qa', component: QA },
             { path: '/students', component: Students },
             { path: '/tutors', component: Tutors },
             { path: '/resources', component: Resources },
-            { path: '/Tutors', component: Tutors },
+            { path: '/tutors', component: Tutors },
             { path: '/statistics', component: Statistics }
         ]
     },
