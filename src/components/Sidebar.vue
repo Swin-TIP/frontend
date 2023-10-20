@@ -24,7 +24,7 @@ const handleLogout = () => {
             <nav>
                 <router-link class="sidenav__link" :class="{ active: currentRoute === '/schedule' }" to="/schedule">Session
                     Schedule</router-link>
-                <router-link v-if="isUserApproved === 'true'" class="sidenav__link"
+                <router-link v-if="isUserApproved === 'true' && userRole !== 'ADMIN'" class="sidenav__link"
                     :class="{ active: currentRoute === '/sessions' }" to="/sessions">Registered
                     Sessions</router-link>
                 <router-link v-if="userRole === 'ADMIN'" class="sidenav__link"

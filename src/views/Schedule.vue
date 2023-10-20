@@ -75,8 +75,10 @@ watch(dateSelected, () => fetchSessions());
     <h1>Schedule</h1>
     <WeekSelector @week-selected="handleWeekSelected" />
     <section class="schedule__content">
-        <button v-if="User.getRole() === 'ADMIN'">Create a Session</button>
-        <DaySelector @day-selected="handleDaySelected" />
+        <div class="schedule__buttons">
+            <DaySelector @day-selected="handleDaySelected" />
+            <button class="schedule__button" v-if="User.getRole() === 'ADMIN'">Create a Session</button>
+        </div>
         <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList"
             :registered-sessions-ids="registeredSessionsList" :registeredView="false" @on-register="fetchSessions" />
     </section>
@@ -85,5 +87,16 @@ watch(dateSelected, () => fetchSessions());
 <style scoped>
 .schedule__content {
     margin-top: 20px;
+}
+
+.schedule__buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.schedule__button {
+    font-size: 15px;
+    width: 150px;
+    margin-right: 10px;
 }
 </style>

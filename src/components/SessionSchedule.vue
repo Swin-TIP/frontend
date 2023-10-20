@@ -148,6 +148,7 @@ const handleClick = async (action, session) => {
                     class="session__actions-disabled" @click="handleClick('enroll', session)">Enrolled</button>
                 <button v-if="User.getRole() === 'STUDENT' && props.registeredSessionsIds.includes(session._id)"
                     class="session__actions-disabled" @click="handleClick('register', session)">Registered</button>
+                <button v-if="User.getRole() === 'ADMIN'" class="session__actions-cancel">Delete</button>
             </div>
             <div v-if="props.registeredView" class="session__actions">
                 <button @click="handleClick('Q&A Board', session)">Q&A Board</button>
@@ -160,7 +161,7 @@ const handleClick = async (action, session) => {
 <style scoped>
 .session__container {
     background-color: #F0F0F0;
-    height: 500px;
+    height: 600px;
     overflow: auto;
 }
 
