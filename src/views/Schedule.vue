@@ -12,7 +12,7 @@ const daySelected = ref();
 const dateSelected = ref(new Date());
 const weekStartSelected = ref();
 const sessionsList = ref([]);
-const registeredSessionsList = ref(User.getRegisteredSessions());
+const registeredSessionsList = ref(User.getApprovedStatus() === true ? User.getRegisteredSessions() : []);
 
 const handleDaySelected = day => {
     daySelected.value = day;
@@ -75,6 +75,7 @@ watch(dateSelected, () => fetchSessions());
     <h1>Schedule</h1>
     <WeekSelector @week-selected="handleWeekSelected" />
     <section class="schedule__content">
+        <button v-if="User.getRole() === 'ADMIN'">Create a Session</button>
         <DaySelector @day-selected="handleDaySelected" />
         <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList"
             :registered-sessions-ids="registeredSessionsList" :registeredView="false" @on-register="fetchSessions" />
