@@ -8,6 +8,7 @@ import WeekSelector from '../components/WeekSelector.vue';
 
 import { getSessionsFromDates } from '../API/sessions';
 import { User } from '../store/user';
+import { toISODate } from '../utils/dateOfWeek';
 
 let createSession = ref(false);
 const daySelected = ref();
@@ -58,7 +59,7 @@ const updateDateSelected = (daySelected, weekStart) => {
 };
 
 const fetchSessions = async (sessionId = null) => {
-    const dateString = dateSelected.value.toISOString().split("T")[0];
+    const dateString = toISODate(dateSelected.value);
     sessionsList.value = await getSessionsFromDates(dateString, dateString);
     if (sessionId) {
         User.addRegisteredSession(sessionId);

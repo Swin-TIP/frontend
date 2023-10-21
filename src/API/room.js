@@ -27,3 +27,20 @@ export const createNewRoom = async function (name, capacity) {
     )
     return response.data
 }
+
+export const getRoomOccupancy = async (startDate, endDate) => {
+    const userToken = User.getToken();
+    try {
+        const response = await axios.get(`${API_URL}/room/list/occupancy/${startDate}/${endDate}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};

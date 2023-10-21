@@ -125,7 +125,7 @@ const handleClick = async (action, session) => {
             <div class="session__details">
                 <p class="session__details-big">{{ sessionTimings[index] }}</p>
                 <p class="session__details-small">Students: {{ session.students.length }}/{{ session.room.capacity }}</p>
-                <p class="session__details-small">Room {{ session.room.name.split("m")[1] }}</p>
+                <p class="session__details-small">Room {{ session.room.name.split("M")[1] }}</p>
             </div>
             <div v-if="session.tutors.length !== 0" class="session__tutors">
                 <div class="session__tutors-each" v-for="tutor in session.tutors">

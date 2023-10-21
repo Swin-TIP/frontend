@@ -1,9 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import { getAllRooms } from '../API/room';
+import { getAllRooms, getRoomOccupancy } from '../API/room';
 import { createSession, updateSessionTutors } from '../API/sessions';
 import { getTutor } from '../API/tutors';
+import { getUnoccupiedRooms } from '../utils/roomOccupancyHelper';
+import { toISODate } from '../utils/dateOfWeek';
 import { User } from '../store/user';
 
 const emit = defineEmits(["onClose"]);
@@ -21,8 +23,8 @@ const subjectList = ref([
     'Spanish'
 ]);
 const formInput = {
-    timeslot: new Date(),
-    duration: "",
+    timeslot: null,
+    duration: 0,
     room: "",
     subjects: [],
     tutors: []
@@ -30,6 +32,16 @@ const formInput = {
 
 const onClose = () => {
     emit("onClose", false);
+};
+
+const handleChange = async () => {
+    if (formInput.timeslot !== null && formInput.duration !== 0) {
+        const datetime = new Date(formInput.timeslot);
+        const datetimeString = toISODate(datetime);
+        const allRooms = await getRoomOccupancy(datetimeString, datetimeString);
+        const unoccupiedRooms = getUnoccupiedRooms(allRooms, datetime.getTime(), formInput.duration);
+        roomList.value = unoccupiedRooms;
+    }
 };
 
 const onSubmit = async () => {
@@ -56,9 +68,11 @@ onMounted(async () => {
             <h1 class="create__title">Create a session</h1>
             <div class="create__form">
                 <label for="timeslot" class="timeslot__label">Timeslot</label>
-                <input type="datetime-local" id="timeslot" name="timeslot" v-model="formInput.timeslot" />
+                <input type="datetime-local" id="timeslot" name="timeslot" v-model="formInput.timeslot"
+                    @change="handleChange" />
                 <label for="duration">Duration</label>
-                <input type="number" id="duration" name="duration" min="1" v-model="formInput.duration" />
+                <input type="number" id="duration" name="duration" min="1" v-model="formInput.duration"
+                    @change="handleChange" />
                 <label for="room">Room</label>
                 <select class="select__room" v-model="formInput.room" name="room" id="room">
                     <option v-for="room in roomList" :value="room._id">{{ room.name }}</option>
