@@ -18,6 +18,7 @@ const handleDaySelected = day => {
     daySelected.value = day;
     if (weekStartSelected.value) {
         dateSelected.value = updateDateSelected(day, weekStartSelected.value);
+        console.log(dateSelected.value);
     }
 };
 
@@ -68,9 +69,9 @@ const updateDayRegisteredSessions = () => {
     let result = [];
     result = registeredSessions.filter(session => {
         let sameDay = false;
-        sameDay = session.start_at.getFullYear() === dateSelected.value.getFullYear();
-        sameDay = session.start_at.getMonth() === dateSelected.value.getMonth();
-        sameDay = session.start_at.getDate() === dateSelected.value.getDate();
+        sameDay = session.start_at.getFullYear() === dateSelected.value.getFullYear()
+            && session.start_at.getMonth() === dateSelected.value.getMonth()
+            && session.start_at.getDate() === dateSelected.value.getDate();
         return sameDay;
     });
     dayRegisteredSessions.value = result;
