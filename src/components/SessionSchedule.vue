@@ -95,7 +95,7 @@ const handleClick = async (action, session) => {
     switch (action) {
         case "Q&A Board":
             localStorage.setItem('selectedSession', JSON.stringify(session));
-            router.push(`/qa?session_id=${session}`);
+            router.push(`/qa?session_id=${session._id}`);
             break;
         case "register":
             await registerForSession(session._id);
