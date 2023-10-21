@@ -67,12 +67,14 @@ const fetchSessions = async (sessionId = null) => {
 };
 
 const handleCreate = async () => {
-    console.log("Create session");
     createSession.value = true;
 };
 
-const onModalClose = () => {
+const onModalClose = async (isSessionCreated = false) => {
     createSession.value = false;
+    if (isSessionCreated) {
+        await fetchSessions();
+    }
 };
 
 onMounted(() => {
@@ -92,7 +94,8 @@ watch(dateSelected, () => fetchSessions());
                 Session</button>
         </div>
         <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList"
-            :registered-sessions-ids="registeredSessionsList" :registeredView="false" @on-register="fetchSessions" />
+            :registered-sessions-ids="registeredSessionsList" :registeredView="false" @on-register="fetchSessions"
+            @on-delete="fetchSessions" />
     </section>
     <CreateSession v-if="createSession === true" @on-close="onModalClose" />
 </template>

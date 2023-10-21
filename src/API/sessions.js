@@ -103,3 +103,41 @@ export const withdrawFromSession = async (sessionId) => {
         return new Error(error);
     };
 };
+
+export const updateSessionTutors = async (sessionId, tutors) => {
+    const userToken = User.getToken();
+    try {
+        const body = {
+            tutors
+        };
+        const response = await axios.patch(`${API_URL}/session/${sessionId}/tutors`,
+            body,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
+export const deleteSession = async (sessionId) => {
+    const userToken = User.getToken();
+    try {
+        const response = await axios.delete(`${API_URL}/session/${sessionId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};

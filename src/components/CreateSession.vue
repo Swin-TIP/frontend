@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 
 import { getAllRooms } from '../API/room';
+import { createSession, updateSessionTutors } from '../API/sessions';
 import { getTutor } from '../API/tutors';
 import { User } from '../store/user';
 
@@ -28,11 +29,17 @@ const formInput = {
 };
 
 const onClose = () => {
-    emit("onClose");
+    emit("onClose", false);
 };
 
-const onSubmit = () => {
-    console.log(formInput);
+const onSubmit = async () => {
+    const datetime = new Date(formInput.timeslot);
+    const response = await createSession(datetime.getTime(), formInput.duration, formInput.room, formInput.subjects);
+    if (!(response instanceof Error)) {
+        const createdSessionId = response._id;
+        await updateSessionTutors(createdSessionId, formInput.tutors);
+    }
+    emit("onClose", true);
 };
 
 onMounted(async () => {

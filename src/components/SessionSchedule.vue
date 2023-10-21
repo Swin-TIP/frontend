@@ -1,12 +1,12 @@
 <script setup>
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { User } from '../store/user';
-import { registerForSession, withdrawFromSession } from '../API/sessions';
+import { deleteSession, registerForSession, withdrawFromSession } from '../API/sessions';
 import moment from 'moment';
 
-const emit = defineEmits(['onRegister', 'onWithdraw']);
+const emit = defineEmits(['onDelete', 'onRegister', 'onWithdraw']);
 const router = useRouter();
 
 const props = defineProps({
@@ -109,6 +109,10 @@ const handleClick = async (action, session) => {
             await registerForSession(session._id);
             emit("onRegister", session._id);
             break;
+        case "delete":
+            await deleteSession(session._id);
+            emit("onDelete");
+            break;
     }
 };
 </script>
@@ -148,7 +152,8 @@ const handleClick = async (action, session) => {
                     class="session__actions-disabled" @click="handleClick('enroll', session)">Enrolled</button>
                 <button v-if="User.getRole() === 'STUDENT' && props.registeredSessionsIds.includes(session._id)"
                     class="session__actions-disabled" @click="handleClick('register', session)">Registered</button>
-                <button v-if="User.getRole() === 'ADMIN'" class="session__actions-cancel">Delete</button>
+                <button v-if="User.getRole() === 'ADMIN'" class="session__actions-cancel"
+                    @click="handleClick('delete', session)">Delete</button>
             </div>
             <div v-if="props.registeredView" class="session__actions">
                 <button @click="handleClick('Q&A Board', session)">Q&A Board</button>
