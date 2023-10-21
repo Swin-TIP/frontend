@@ -83,8 +83,9 @@ const handleWithdraw = async (sessionId) => {
     updateDayRegisteredSessions();
 };
 
-onMounted(() => {
-    fetchRegisteredSessions();
+onMounted(async () => {
+    await fetchRegisteredSessions();
+    updateDayRegisteredSessions();
 });
 
 watch(dateSelected, () => updateDayRegisteredSessions());
