@@ -13,7 +13,7 @@ import Resources from './views/Resources.vue';
 import Statistics from './views/Statistics.vue';
 
 // Vuetify
-// import 'vuetify/styles'
+import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -31,7 +31,7 @@ const routes = [
             { path: '/students', component: Students },
             { path: '/tutors', component: Tutors },
             { path: '/resources', component: Resources },
-            { path: '/Tutors', component: Tutors },
+            { path: '/tutors', component: Tutors },
             { path: '/statistics', component: Statistics }
         ]
     },

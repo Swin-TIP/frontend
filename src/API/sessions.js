@@ -1,8 +1,31 @@
 import axios from "axios";
+import { User } from '../store/user';
 
 const API_URL = "https://swinburne-398109.ts.r.appspot.com/api";
 
-const userToken = localStorage.getItem('token');
+export const createSession = async (startAt, duration, room, subjects) => {
+    const userToken = User.getToken();
+    try {
+        const body = {
+            start_at: startAt,
+            duration,
+            room,
+            subjects
+        };
+        const response = await axios.post(`${API_URL}/session/create`,
+            body,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
 
 export const getSessionsFromDates = async (startDate, endDate) => {
     try {
@@ -25,12 +48,93 @@ export const getSessionDetails = async (sessionId) => {
 };
 
 export const getRegisteredSessions = async () => {
+    const userToken = User.getToken();
     try {
         const response = await axios.get(`${API_URL}/user/session/list`, {
             headers: {
                 Authorization: `Bearer ${userToken}`
             }
         });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
+export const registerForSession = async (sessionId) => {
+    const userToken = User.getToken();
+    try {
+        const body = {
+            enroll: true
+        };
+        const response = await axios.patch(`${API_URL}/session/enrollment/${sessionId}`,
+            body,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
+export const withdrawFromSession = async (sessionId) => {
+    const userToken = User.getToken();
+    try {
+        const body = {
+            enroll: false
+        };
+        const response = await axios.patch(`${API_URL}/session/enrollment/${sessionId}`,
+            body,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
+export const updateSessionTutors = async (sessionId, tutors) => {
+    const userToken = User.getToken();
+    try {
+        const body = {
+            tutors
+        };
+        const response = await axios.patch(`${API_URL}/session/${sessionId}/tutors`,
+            body,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
+export const deleteSession = async (sessionId) => {
+    const userToken = User.getToken();
+    try {
+        const response = await axios.delete(`${API_URL}/session/${sessionId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
         return response.data;
     } catch (error) {
         console.error(error);

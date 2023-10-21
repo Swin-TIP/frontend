@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 
 import { login } from '../API/auth';
+import { getRegisteredSessions } from '../API/sessions';
 import { User } from '../store/user';
 import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 
@@ -19,6 +20,9 @@ const handleLogin = async () => {
             console.log("Error occurred");
         } else {
             User.create(data.role, data.accessToken);
+            const registeredSessions = await getRegisteredSessions();
+            const registeredSessionsIds = registeredSessions.map(session => session._id);
+            User.setRegisteredSessions(registeredSessionsIds);
             router.push("/");
         }
     }
@@ -54,7 +58,7 @@ const handleLogin = async () => {
 .container {
     display: flex;
     flex-direction: column;
-    width: 15em;
+    width: 300px;
     padding: 2em 2.5em;
     background-color: #FAFAFA;
 }

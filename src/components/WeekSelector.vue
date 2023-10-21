@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { formatDateString, startOfWeek, endOfWeek, previousWeek, nextWeek } from '../utils/dateOfWeek';
 
 const emit = defineEmits(['week-selected']);
@@ -30,7 +30,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <section class="container">
+    <section class="week__container">
         <button class="selector__button" @click="previousWeekHandler">&lt; PREV</button>
         <span>{{ dateStartString }} - {{ dateEndString }}</span>
         <button class="selector__button" @click="nextWeekHandler">NEXT &gt;</button>
@@ -38,7 +38,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
+.week__container {
     display: flex;
     justify-content: space-between;
     align-items: center;

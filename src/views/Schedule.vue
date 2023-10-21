@@ -1,16 +1,21 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 
+import CreateSession from '../components/CreateSession.vue';
 import DaySelector from '../components/DaySelector.vue';
 import SessionSchedule from '../components/SessionSchedule.vue';
 import WeekSelector from '../components/WeekSelector.vue';
 
 import { getSessionsFromDates } from '../API/sessions';
+import { User } from '../store/user';
+import { toISODate } from '../utils/dateOfWeek';
 
+let createSession = ref(false);
 const daySelected = ref();
 const dateSelected = ref(new Date());
 const weekStartSelected = ref();
 const sessionsList = ref([]);
+const registeredSessionsList = ref(User.getApprovedStatus() === true ? User.getRegisteredSessions() : []);
 
 const handleDaySelected = day => {
     daySelected.value = day;
@@ -53,9 +58,24 @@ const updateDateSelected = (daySelected, weekStart) => {
     return newDateSelected;
 };
 
-const fetchSessions = async () => {
-    const dateString = dateSelected.value.toISOString().split("T")[0];
+const fetchSessions = async (sessionId = null) => {
+    const dateString = toISODate(dateSelected.value);
     sessionsList.value = await getSessionsFromDates(dateString, dateString);
+    if (sessionId) {
+        User.addRegisteredSession(sessionId);
+        registeredSessionsList.value = User.getRegisteredSessions();
+    }
+};
+
+const handleCreate = async () => {
+    createSession.value = true;
+};
+
+const onModalClose = async (isSessionCreated = false) => {
+    createSession.value = false;
+    if (isSessionCreated) {
+        await fetchSessions();
+    }
 };
 
 onMounted(() => {
@@ -69,14 +89,31 @@ watch(dateSelected, () => fetchSessions());
     <h1>Schedule</h1>
     <WeekSelector @week-selected="handleWeekSelected" />
     <section class="schedule__content">
-        <DaySelector @day-selected="handleDaySelected" />
-        <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList" :registeredView="false" />
+        <div class="schedule__buttons">
+            <DaySelector @day-selected="handleDaySelected" />
+            <button class="schedule__button" v-if="User.getRole() === 'ADMIN'" @click="handleCreate">Create a
+                Session</button>
+        </div>
+        <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList"
+            :registered-sessions-ids="registeredSessionsList" :registeredView="false" @on-register="fetchSessions"
+            @on-delete="fetchSessions" />
     </section>
+    <CreateSession v-if="createSession === true" @on-close="onModalClose" />
 </template>
 
 <style scoped>
 .schedule__content {
     margin-top: 20px;
-    padding: 10px;
+}
+
+.schedule__buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.schedule__button {
+    font-size: 15px;
+    width: 150px;
+    margin-right: 10px;
 }
 </style>
