@@ -3,6 +3,30 @@ import { User } from '../store/user';
 
 const API_URL = "https://swinburne-398109.ts.r.appspot.com/api";
 
+export const createSession = async (startAt, duration, room, subjects) => {
+    const userToken = User.getToken();
+    try {
+        const body = {
+            start_at: startAt,
+            duration,
+            room,
+            subjects
+        };
+        const response = await axios.post(`${API_URL}/session/create`,
+            body,
+            {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return new Error(error);
+    };
+};
+
 export const getSessionsFromDates = async (startDate, endDate) => {
     try {
         const response = await axios.get(`${API_URL}/session/list/${startDate}/${endDate}`);

@@ -1,0 +1,160 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+
+import { getAllRooms } from '../API/room';
+import { getTutor } from '../API/tutors';
+import { User } from '../store/user';
+
+const emit = defineEmits(["onClose"]);
+
+const tutorList = ref([]);
+const roomList = ref([]);
+const subjectList = ref([
+    'Geography',
+    'Mathematics',
+    'English',
+    'Computer Science',
+    'Literature',
+    'Chemistry',
+    'German',
+    'Spanish'
+]);
+const formInput = {
+    timeslot: new Date(),
+    duration: "",
+    room: "",
+    subjects: [],
+    tutors: []
+};
+
+const onClose = () => {
+    emit("onClose");
+};
+
+const onSubmit = () => {
+    console.log(formInput);
+};
+
+onMounted(async () => {
+    const token = User.getToken();
+    tutorList.value = await getTutor(token);
+    roomList.value = await getAllRooms();
+});
+</script>
+
+<template>
+    <div class="create__container">
+        <div @click="onClose" class="create__outer" />
+        <section class="create__content">
+            <h1 class="create__title">Create a session</h1>
+            <div class="create__form">
+                <label for="timeslot" class="timeslot__label">Timeslot</label>
+                <input type="datetime-local" id="timeslot" name="timeslot" v-model="formInput.timeslot" />
+                <label for="duration">Duration</label>
+                <input type="number" id="duration" name="duration" min="1" v-model="formInput.duration" />
+                <label for="room">Room</label>
+                <select class="select__room" v-model="formInput.room" name="room" id="room">
+                    <option v-for="room in roomList" :value="room._id">{{ room.name }}</option>
+                </select>
+                <label for="subjects">Subjects</label>
+                <select class="select__subject" v-model="formInput.subjects" name="subject" id="subject" multiple>
+                    <option v-for="subject in subjectList" :value="subject">{{ subject }}</option>
+                </select>
+                <label for="tutors">Tutors</label>
+                <select class="select__tutors" v-model="formInput.tutors" name="tutors" id="tutors" multiple>
+                    <option v-for="tutor in tutorList" :value="tutor._id">{{ tutor.name }}</option>
+                </select>
+            </div>
+            <button @click="onSubmit">Submit</button>
+        </section>
+    </div>
+</template>
+
+<style scoped>
+.create__container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    z-index: 2;
+}
+
+.create__outer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(128, 128, 128, 0.885);
+    z-index: 2;
+}
+
+.create__content {
+    background-color: #eeeeee;
+    border-radius: 10px;
+    width: 500px;
+    padding: 10px 20px;
+    z-index: 3;
+}
+
+.create__title {
+    text-align: center;
+    margin-bottom: 1em;
+    margin-left: 0;
+}
+
+.create__form {
+    display: grid;
+    grid-template-columns: 200px auto;
+}
+
+input {
+    height: 1.8em;
+    padding: 0.3em 0.7em;
+    margin-bottom: 1.2em;
+    border: none;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+}
+
+.select__room {
+    height: 1.8em;
+    padding: 0 8px;
+    margin-bottom: 1.2em;
+    border: none;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+}
+
+.select__subject {
+    height: 100px;
+    padding: 0 8px;
+    margin-bottom: 1.2em;
+    border: none;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+}
+
+.select__tutors {
+    height: 300px;
+    padding: 0 8px;
+    margin-bottom: 1.2em;
+    border: none;
+    border-radius: 10px;
+    background-color: #D9D9D9;
+}
+
+.timeslot__label {
+    position: relative;
+}
+
+.create__form--date {
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+</style>

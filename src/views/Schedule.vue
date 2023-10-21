@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 
+import CreateSession from '../components/CreateSession.vue';
 import DaySelector from '../components/DaySelector.vue';
 import SessionSchedule from '../components/SessionSchedule.vue';
 import WeekSelector from '../components/WeekSelector.vue';
@@ -8,6 +9,7 @@ import WeekSelector from '../components/WeekSelector.vue';
 import { getSessionsFromDates } from '../API/sessions';
 import { User } from '../store/user';
 
+let createSession = ref(false);
 const daySelected = ref();
 const dateSelected = ref(new Date());
 const weekStartSelected = ref();
@@ -64,6 +66,15 @@ const fetchSessions = async (sessionId = null) => {
     }
 };
 
+const handleCreate = async () => {
+    console.log("Create session");
+    createSession.value = true;
+};
+
+const onModalClose = () => {
+    createSession.value = false;
+};
+
 onMounted(() => {
     fetchSessions();
 });
@@ -77,11 +88,13 @@ watch(dateSelected, () => fetchSessions());
     <section class="schedule__content">
         <div class="schedule__buttons">
             <DaySelector @day-selected="handleDaySelected" />
-            <button class="schedule__button" v-if="User.getRole() === 'ADMIN'">Create a Session</button>
+            <button class="schedule__button" v-if="User.getRole() === 'ADMIN'" @click="handleCreate">Create a
+                Session</button>
         </div>
         <SessionSchedule :day="daySelected" :date="dateSelected" :sessions-list="sessionsList"
             :registered-sessions-ids="registeredSessionsList" :registeredView="false" @on-register="fetchSessions" />
     </section>
+    <CreateSession v-if="createSession === true" @on-close="onModalClose" />
 </template>
 
 <style scoped>
