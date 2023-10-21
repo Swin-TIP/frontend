@@ -8,7 +8,6 @@ export const getUnoccupiedRooms = (roomsList, startTime, duration) => {
             let result = false;
             // Check startTime of each occupied room against endTime of created session
             // Check endTime of each occupied room against startTime of created session
-            if (room.name === 'RM872') console.log(room._id)
             room.occupied.forEach(occupiedRoom => {
                 result = occupiedRoom.start_at >= endTime || occupiedRoom.end_at <= startTime;
             });
