@@ -16,13 +16,14 @@ const handleRegister = async () => {
         console.error("Passwords dont match");
     }
     const data = await register(name, email, password, grade);
+    console.log(data);
 
     if (data instanceof Error) {
         console.log("Error occurred");
     } else {
         localStorage.setItem("id", data._id);
         localStorage.setItem("role", data.role);
-        localStorage.setItem("approved", false);
+        localStorage.setItem("approved", data.approved);
         router.push("/");
     }
 };
