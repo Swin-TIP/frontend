@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const emit = defineEmits(["day-selected"]);
 
@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container">
+    <div class="day__container">
         <button @click="makeDayActive('Monday')" class="tab" :class="{ active: activeDay === 'Monday' }">
             M
         </button>
@@ -42,7 +42,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
+.day__container {
     margin-left: 30px;
     height: 40px;
 }

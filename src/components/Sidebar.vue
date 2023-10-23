@@ -6,10 +6,10 @@ import BrightSparksLogo from '../assets/icons/brightsparks.svg';
 const currentRoute = useRoute().fullPath;
 const router = useRouter();
 const userRole = User.getRole();
+const isUserApproved = User.getApprovedStatus();
 
 const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
+    User.logout();
     router.push('/login');
 };
 </script>
@@ -24,8 +24,8 @@ const handleLogout = () => {
             <nav>
                 <router-link class="sidenav__link" :class="{ active: currentRoute === '/schedule' }" to="/schedule">Session
                     Schedule</router-link>
-                <router-link class="sidenav__link" :class="{ active: currentRoute === '/sessions' }"
-                    to="/sessions">Registered
+                <router-link v-if="isUserApproved === 'true' && userRole !== 'ADMIN'" class="sidenav__link"
+                    :class="{ active: currentRoute === '/sessions' }" to="/sessions">Registered
                     Sessions</router-link>
                 <router-link v-if="userRole === 'ADMIN'" class="sidenav__link"
                     :class="{ active: currentRoute === '/tutors' }" to="/tutors">
@@ -79,7 +79,6 @@ const handleLogout = () => {
     align-items: center;
     text-decoration: none;
     color: black;
-    height: 30px;
     padding: 10px 30px;
 }
 
