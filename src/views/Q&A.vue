@@ -126,7 +126,7 @@ export default {
     markAsAnswered(index) {
       const token = User.getToken()
 
-      const mark = 'true'
+      let mark = !this.questionArr[index].is_answered
 
       let qID = this.questionArr[index]._id
 
