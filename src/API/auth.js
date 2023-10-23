@@ -33,8 +33,7 @@ export const register = async (name, email, password, grade) => {
     };
     try {
         const response = await axios.post(`${API_URL}/student/register`, body);
-        const { role, _id } = response.data;
-        return role;
+        return response.data;
     } catch (error) {
         console.error(error);
         return new Error(error);

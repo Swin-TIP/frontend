@@ -42,13 +42,13 @@ export const User = reactive({
         localStorage.setItem("registeredSessions", JSON.stringify(registeredSessions));
     },
     addRegisteredSession(sessionId) {
-        let registeredSessions = JSON.parse(localStorage.registeredSessions);
+        let registeredSessions = JSON.parse(localStorage.getItem("registeredSessions"));
         registeredSessions = [...registeredSessions, sessionId];
-        localStorage.registeredSessions = JSON.stringify(registeredSessions);
+        localStorage.setItem("registeredSessions", JSON.stringify(registeredSessions));
     },
     removeRegisteredSession(sessionId) {
-        let registeredSessions = JSON.parse(localStorage.registeredSessions);
+        let registeredSessions = JSON.parse(localStorage.getItem("registeredSessions"));
         registeredSessions = registeredSessions.filter(id => id !== sessionId);
-        localStorage.registeredSessions = JSON.stringify(registeredSessions);
+        localStorage.setItem("registeredSessions", JSON.stringify(registeredSessions));
     }
 });

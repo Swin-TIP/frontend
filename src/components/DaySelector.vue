@@ -51,10 +51,11 @@ onMounted(() => {
     height: 100%;
     width: 70px;
     border: 1px solid #B3B3B3;
-    background-color: #F0F0F0;
+    background-color: rgb(var(--DISABLED));
 }
 
 .active {
     border-bottom: none;
+    background-color: #F0F0F0;
 }
 </style>

@@ -15,7 +15,7 @@ const daySelected = ref();
 const dateSelected = ref(new Date());
 const weekStartSelected = ref();
 const sessionsList = ref([]);
-const registeredSessionsList = ref(User.getApprovedStatus() === true ? User.getRegisteredSessions() : []);
+const registeredSessionsList = ref(User.getApprovedStatus() === 'true' ? User.getRegisteredSessions() : []);
 
 const handleDaySelected = day => {
     daySelected.value = day;
