@@ -16,17 +16,18 @@
       <span class="qDetail">{{ questionArr[index].question }}</span>
       <span class="asker">Asked by: {{ questionArr[index].raised_by.name }}</span>
       <div class="buttons" v-if="role === 'TUTOR'">
-        <button id="answredBy" v-if="questionArr[index].is_answered === true">Answered by: {{
-          questionArr[index].answered_by.name }}</button>
-        <button id="answering"
+        <div class="answeredBy" v-if="questionArr[index].is_answered === true">Answered by: {{
+          questionArr[index].answered_by.name }}</div>
+        <div class="voteDetail">{{ questionArr[index].votes.length }} Votes</div>
+        <div id="answering"
           :class="{ answering: !questionArr[index].is_answered, answered: questionArr[index].is_answered }">{{
-            questionArr[index].is_answered ? 'Answered' : 'Answering' }}</button>
+            questionArr[index].is_answered ? 'Answered' : 'Answering' }}</div>
         <button id="mark" v-on:click="markAsAnswered(index)">{{ !questionArr[index].is_answered ? 'Mark as answered' :
           'Remove answer' }}</button>
       </div>
       <div class="buttons" v-if="role === 'STUDENT'">
-        <button id="answredBy" v-if="questionArr[index].is_answered === true">Answered by: {{
-          questionArr[index].answered_by.name }}</button>
+        <div class="answeredBy" v-if="questionArr[index].is_answered === true">Answered by: {{
+          questionArr[index].answered_by.name }}</div>
         <div class="voteDetail">{{ questionArr[index].votes.length }} Votes</div>
         <button class="vote" @click="voteForQuestion(index)">&uarr;</button>
       </div>
@@ -237,7 +238,6 @@ export default {
   /* border-radius: 15px; */
 }
 
-#answering,
 #mark {
   width: 150px;
   height: 30px;
@@ -246,7 +246,32 @@ export default {
 }
 
 #answering {
+  position: relative;
+  right: -15px;
+  width: 90px;
+  max-height: 30px;
   color: rgb(var(--DANGER));
+  background-color: aqua;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.answeredBy {
+  position: relative;
+  top: -10px;
+  right: -40px;
+  max-width: 130px;
+}
+
+.vote {
+  position: relative;
+  top: -5px;
+  right: -10px;
+}
+
+.voteDetail {
+  position: relative;
+  right: -25px;
 }
 
 #mark:hover {
