@@ -77,9 +77,9 @@ export default {
       if (this.qInput !== '') {
         const token = User.getToken()
 
-        let sID = this.sessionId
+        let sessionID = this.$route.query.session_id
 
-        postRequest(this.qInput, token, sID)
+        postRequest(this.qInput, token, sessionID)
           .then(response => {
             console.log(response.data);
             this.getQuestion()
