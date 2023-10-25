@@ -260,7 +260,10 @@ export default {
   position: relative;
   top: -10px;
   right: -40px;
-  max-width: 130px;
+  max-width: 135px;
+  text-align: center;
+  background-color: #4ADEFF;
+  border-radius: 10px;
 }
 
 .vote {
