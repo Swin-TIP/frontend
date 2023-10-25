@@ -6,6 +6,7 @@ import { User } from '../store/user';
 import { deleteSession, registerForSession, withdrawFromSession } from '../API/sessions';
 import moment from 'moment';
 
+const isAuthenticated = User.isAuthenticated();
 const emit = defineEmits(['onDelete', 'onRegister', 'onWithdraw']);
 const router = useRouter();
 
@@ -141,7 +142,7 @@ const handleClick = async (action, session) => {
             <div v-if="session.tutors.length === 0" class="session__tutors">
                 <p class="session__details-big">Tutor: None</p>
             </div>
-            <div v-if="!props.registeredView" class="session__actions">
+            <div v-if="!props.registeredView && isAuthenticated" class="session__actions">
                 <!-- Not enrolled/registered -->
                 <button v-if="User.getRole() === 'TUTOR' && !props.registeredSessionsIds.includes(session._id)"
                     @click="handleClick('enroll', session)">Enroll</button>
@@ -155,10 +156,11 @@ const handleClick = async (action, session) => {
                 <button v-if="User.getRole() === 'ADMIN'" class="session__actions-cancel"
                     @click="handleClick('delete', session)">Delete</button>
             </div>
-            <div v-if="props.registeredView" class="session__actions">
+            <div v-if="props.registeredView && isAuthenticated" class="session__actions">
                 <button @click="handleClick('Q&A Board', session)">Q&A Board</button>
                 <button class="session__actions-cancel" @click="handleClick('withdraw', session)">Withdraw</button>
             </div>
+            <div class="session__actions" v-if="!isAuthenticated" />
         </article>
     </div>
 </template>
