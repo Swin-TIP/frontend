@@ -70,7 +70,7 @@ onMounted(async () => {
                 <label for="timeslot" class="timeslot__label">Timeslot</label>
                 <input type="datetime-local" id="timeslot" name="timeslot" v-model="formInput.timeslot"
                     @change="handleChange" />
-                <label for="duration">Duration</label>
+                <label for="duration">Duration (minutes)</label>
                 <input type="number" id="duration" name="duration" min="1" v-model="formInput.duration"
                     @change="handleChange" />
                 <label for="room">Room</label>
